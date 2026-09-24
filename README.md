@@ -1,6 +1,8 @@
 # PreferenceKit
 
-PreferenceKit is a Swift Package for ...
+PreferenceKit provides a ready-made SwiftUI settings screen with application
+information, update links, acknowledgements, changelog entries, support
+feedback, privacy policy links, and developer social-media links.
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F0xWDG%2FPreferenceKit%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/0xWDG/PreferenceKit)
 
@@ -13,7 +15,7 @@ PreferenceKit is a Swift Package for ...
 ## Requirements
 
 - Swift 6.0+ (Xcode 16+)
-- iOS 16+, macOS 13+, watchOS 9+, tvOS 16+
+- iOS 15+, macOS 12+, watchOS 8+, tvOS 15+
 
 ## Installation (Package.swift)
 
@@ -41,14 +43,47 @@ import SwiftUI
 import PreferenceKit
 
 struct ContentView: View {
+    @State private var sendsDiagnostics = true
+
     var body: some View {
-        VStack {
-            /// ...
+        PreferenceKit(
+            createdBy: "[Example Studio](https://example.com)",
+            privacyPolicyURL: URL(string: "https://example.com/privacy"),
+            supportEmail: "support@example.com",
+            socialMediaLinks: [
+                .init(platform: .github, profile: "example"),
+                .init(platform: .mastodon, profile: "@example@mastodon.social"),
+                .init(platform: .website, profile: "https://example.com")
+            ],
+            changeLog: [
+                .init(version: "1.2.0", date: "2026-09-24", text: "Improved settings.")
+            ],
+            acknowledgements: [
+                .init(
+                    name: "Example Dependency",
+                    copyright: "Example Authors",
+                    licence: "MIT",
+                    url: "https://github.com/example/dependency"
+                )
+            ]
+        ) {
+            Section("Support") {
+                Toggle("Include diagnostics in feedback", isOn: $sendsDiagnostics)
+            }
+        } bottomContent: {
+            Section {
+                Text("Thanks for using Example App.")
+            }
         }
-        .padding()
     }
 }
 ```
+
+`privacyPolicyURL` is displayed in an in-app web view where supported; on other
+platforms or OS versions, PreferenceKit opens the URL in the system browser.
+
+See the [DocC usage guide](Sources/PreferenceKit/PreferenceKit.docc/UsingPreferenceKit.md)
+for configuration details.
 
 ## Screenshot
 
