@@ -26,7 +26,7 @@ struct ListButtonStyle: ButtonStyle {
     ///
     /// - Parameter configuration: The configuration of the button.
     /// - Returns: A filled button style.
-    public func makeBody(configuration: Configuration) -> some View {
+    func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundStyle(isEnabled ? .primary : .secondary)
             .frame(maxWidth: .infinity, alignment: .leading)

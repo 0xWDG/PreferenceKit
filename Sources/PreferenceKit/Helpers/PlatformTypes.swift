@@ -19,54 +19,54 @@ import SwiftUI
 import UIKit
 
 /// `UIFont/NSFont` alias for platform-agnostic code.
-public typealias PlatformFont = UIFont
+typealias PlatformFont = UIFont
 
 #if !os(watchOS) && !os(tvOS)
 /// `UIPasteboard/NSPasteboard` alias for platform-agnostic code.
-public typealias PlatformPasteboard = UIPasteboard
+typealias PlatformPasteboard = UIPasteboard
 #endif
 
 /// `UIImage/NSImage` alias for platform-agnostic code.
-public typealias PlatformImage = UIImage
+typealias PlatformImage = UIImage
 
 /// `UIColor/NSColor` alias for platform-agnostic code.
-public typealias PlatformColor = UIColor
+typealias PlatformColor = UIColor
 
 #if !os(watchOS)
     /// `UIView/NSView` alias for platform-agnostic code.
-    public typealias PlatformView = UIView
+    typealias PlatformView = UIView
 
     /// `UIViewController/NSViewController` alias for platform-agnostic code.
-    public typealias PlatformViewController = UIViewController
+    typealias PlatformViewController = UIViewController
 
     /// `UIWindow/NSWindow` alias for platform-agnostic code.
-    public typealias PlatformWindow = UIWindow
+    typealias PlatformWindow = UIWindow
 
     /// `UIHostingView/NSHostingView` alias for platform-agnostic code.
-    public typealias PlatformHostingView = UIView
+    typealias PlatformHostingView = UIView
 
     /// `UIHostingController/NSHostingController` alias for platform-agnostic code.
-    public typealias PlatformHostingController = UIHostingController
+    typealias PlatformHostingController = UIHostingController
 
     /// `UIViewControllerRepresentable/NSViewControllerRepresentable` alias for platform-agnostic code.
-    public typealias PlatformViewControllerRepresentable = UIViewControllerRepresentable
+    typealias PlatformViewControllerRepresentable = UIViewControllerRepresentable
 
     /// `UIViewRepresentable/NSViewRepresentable` alias for platform-agnostic code.
-    public typealias PlatformViewRepresentableType = UIViewRepresentable
+    typealias PlatformViewRepresentableType = UIViewRepresentable
 
     /// `UIWindowScene` alias for platform-agnostic code.
     /// - Note: Since AppKit doesn't have the concept of window scenes, \
     /// this is aliased to `NSScreen` when building a native macOS target.
-    public typealias PlatformWindowScene = UIWindowScene
+    typealias PlatformWindowScene = UIWindowScene
 
     #if !os(visionOS)
         /// `UIScreen/NSScreen` alias for platform-agnostic code.
         /// - Note: `UIScreen` is not available on visionOS.
-        public typealias PlatformScreen = UIScreen
+        typealias PlatformScreen = UIScreen
     #endif
 #endif
 
-public extension PlatformImage {
+extension PlatformImage {
     /// Create a `PlatformImage` from contents of url/file.
     ///
     /// - Parameter url: The URL to create the image from.
@@ -84,50 +84,50 @@ public extension PlatformImage {
 import AppKit
 
 /// `UIFont/NSFont` alias for platform-agnostic code.
-public typealias PlatformFont = NSFont
+typealias PlatformFont = NSFont
 
 /// `UIPasteboard/NSPasteboard` alias for platform-agnostic code.
-public typealias PlatformPasteboard = NSPasteboard
+typealias PlatformPasteboard = NSPasteboard
 
 /// `UIImage/NSImage` alias for platform-agnostic code.
-public typealias PlatformImage = NSImage
+typealias PlatformImage = NSImage
 
 /// `UIColor/NSColor` alias for platform-agnostic code.
-public typealias PlatformColor = NSColor
+typealias PlatformColor = NSColor
 
 /// `UIView/NSView` alias for platform-agnostic code.
-public typealias PlatformView = NSView
+typealias PlatformView = NSView
 
 /// `UIViewController/NSViewController` alias for platform-agnostic code.
-public typealias PlatformViewController = NSViewController
+typealias PlatformViewController = NSViewController
 
 /// `UIWindow/NSWindow` alias for platform-agnostic code.
-public typealias PlatformWindow = NSWindow
+typealias PlatformWindow = NSWindow
 
 /// `UIHostingView/NSHostingView` alias for platform-agnostic code.
-public typealias PlatformHostingView = NSHostingView
+typealias PlatformHostingView = NSHostingView
 
 /// `UIHostingController/NSHostingController` alias for platform-agnostic code.
-public typealias PlatformHostingController = NSHostingController
+typealias PlatformHostingController = NSHostingController
 
 /// `UIViewControllerRepresentable/NSViewControllerRepresentable` alias for platform-agnostic code.
-public typealias PlatformViewControllerRepresentable = NSViewControllerRepresentable
+typealias PlatformViewControllerRepresentable = NSViewControllerRepresentable
 
 /// `UIViewRepresentable/NSViewRepresentable` alias for platform-agnostic code.
 /// - Note: You may adopt the ``PlatformViewRepresentable`` protocol \
 /// in order to use a single implementation for both UIKit and AppKit platforms.
-public typealias PlatformViewRepresentableType = NSViewRepresentable
+typealias PlatformViewRepresentableType = NSViewRepresentable
 
 /// `UIScreen/NSScreen` alias for platform-agnostic code.
 /// - Note: `UIScreen` is not available on visionOS.
-public typealias PlatformScreen = NSScreen
+typealias PlatformScreen = NSScreen
 
 /// `UIWindowScene` alias for platform-agnostic code.
 /// - Note: Since AppKit doesn't have the concept of window scenes, \
 /// this is aliased to `NSScreen` when building a native macOS target.
-public typealias PlatformWindowScene = NSScreen
+typealias PlatformWindowScene = NSScreen
 
-public extension NSImage {
+extension NSImage {
     /// Create a `NSImage` from a CGImage.
     ///
     /// - Parameter cgImage: The CGImage to create the NSImage from.

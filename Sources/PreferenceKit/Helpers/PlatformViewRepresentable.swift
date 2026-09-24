@@ -14,7 +14,7 @@ import SwiftUI
 
 /// A platform-agnostic version of `UIViewRepresentable`/`NSViewRepresentable`,
 /// allowing for a single implementation to be used for both UIKit and AppKit platforms.
-public protocol PlatformViewRepresentable: PlatformViewRepresentableType {
+protocol PlatformViewRepresentable: PlatformViewRepresentableType {
     /// The type of view this representable manages.
     associatedtype PlatformViewType
 
@@ -39,7 +39,7 @@ public protocol PlatformViewRepresentable: PlatformViewRepresentableType {
 #if canImport(UIKit)
 /// A platform-agnostic version of `UIViewRepresentable`/`NSViewRepresentable`,
 /// allowing for a single implementation to be used for both UIKit and AppKit platforms.
-public extension PlatformViewRepresentable where UIViewType == PlatformViewType {
+extension PlatformViewRepresentable where UIViewType == PlatformViewType {
     /// Create the platform view.
     ///
     /// - Parameter context: SwiftUI context.
@@ -62,7 +62,7 @@ public extension PlatformViewRepresentable where UIViewType == PlatformViewType 
     }
 }
 #else
-public extension PlatformViewRepresentable where NSViewType == PlatformViewType {
+extension PlatformViewRepresentable where NSViewType == PlatformViewType {
     /// Create the platform view.
     ///
     /// - Parameter context: SwiftUI context.

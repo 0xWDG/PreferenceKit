@@ -22,7 +22,7 @@ import UIKit
 /// - Parameter url: A URL specifying the location to open.
 /// - Returns: `true` if the location was successfully opened; otherwise, `false`.
 @discardableResult
-public func openURL(_ url: String) -> Bool {
+func openURL(_ url: String) -> Bool {
     guard let url = URL(string: url) else {
         return false
     }
@@ -35,7 +35,7 @@ public func openURL(_ url: String) -> Bool {
 /// - Parameter url: A URL specifying the location to open.
 /// - Returns: `true` if the location was successfully opened; otherwise, `false`.
 @discardableResult
-public func openURL(_ url: URL?) -> Bool {
+func openURL(_ url: URL?) -> Bool {
     guard let url = url else {
         return false
     }

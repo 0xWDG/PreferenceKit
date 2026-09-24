@@ -10,15 +10,10 @@
 //
 
 #if canImport(SwiftUI)
+import Foundation
 import SwiftUI
 #if canImport(OSLog)
 import OSLogViewer
-#endif
-#if canImport(StoreKit)
-import StoreKit
-#endif
-#if os(iOS)
-import UIKit
 #endif
 #if canImport(MessageUI)
 import MessageUI
@@ -65,7 +60,6 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     let privacyPolicyURL: URL?
     let supportEmail: String?
     let socialMediaLinks: [SocialMediaLink]
-    var appStoreDeveloperURL: String?
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
     let customTopSection: TopContent?
@@ -92,11 +86,15 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         privacyPolicyURL: URL? = nil,
         supportEmail: String? = nil,
         socialMediaLinks: [SocialMediaLink] = [],
-        OSLogSubsystem: String? = PKAppInfo.bundleIdentifier,
+        OSLogSubsystem: String? = Bundle.main.bundleIdentifier,
         changeLog: [ChangeLogEntry]?,
         acknowledgements: [Acknowledgement]?,
-        @ViewBuilder topContent: @escaping () -> TopContent? = { EmptyView() },
-        @ViewBuilder bottomContent: @escaping () -> BottomContent? = { EmptyView() }
+        @ViewBuilder topContent: @escaping () -> TopContent? = {
+            EmptyView()
+        },
+        @ViewBuilder bottomContent: @escaping () -> BottomContent? = {
+            EmptyView()
+        }
     ) {
         self.createdBy = createdBy
         self.privacyPolicyURL = privacyPolicyURL
@@ -216,13 +214,6 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
             customBottomSection
             PreferenceKitFooterSection()
         }
-        .onAppear {
-#if canImport(StoreKit) && !os(watchOS) && !os(tvOS) && !DEBUG
-            if appStoreDeveloperURL != nil {
-                requestAppReview()
-            }
-#endif
-        }
         .task {
             updateAvailable = await PKAppInfo.updateAvailable
             appStoreVersion = await PKAppInfo.appStoreVersion
@@ -245,20 +236,6 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         }
 #endif
     }
-
-#if canImport(StoreKit) && !os(watchOS) && !os(tvOS)
-    private func requestAppReview() {
-#if os(iOS)
-        guard let windowScene = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .first(where: { $0.activationState == .foregroundActive }) else {
-            return
-        }
-
-        SKStoreReviewController.requestReview(in: windowScene)
-#endif
-    }
-#endif
 
 }
 

@@ -13,7 +13,6 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
 #if canImport(SwiftUI)
 import SwiftUI
 #endif
@@ -36,11 +35,11 @@ import WatchKit
 ///
 /// Get information about the current running application.
 /// This can be used to get the application name, version number, build number, etc.
-public enum PKAppInfo {
+enum PKAppInfo {
     // swiftlint:disable:previous type_body_length
     /// Get application name
     /// - Returns: application name
-    public static var appName: String {
+    static var appName: String {
         if let dictionary = Bundle.main.infoDictionary,
            let dName = dictionary["xCFBundleDisplayName"] as? String {
             return dName
@@ -56,7 +55,7 @@ public enum PKAppInfo {
 
     /// Get application version number
     /// - Returns: application version number
-    public static var versionNumber: String {
+    static var versionNumber: String {
         if let dictionary = Bundle.main.infoDictionary,
            let dVersion = dictionary["CFBundleShortVersionString"] as? String {
             return dVersion
@@ -67,7 +66,7 @@ public enum PKAppInfo {
 
     /// Get application build number
     /// - Returns: application build number
-    public static var buildNumber: String {
+    static var buildNumber: String {
         if let dictionary = Bundle.main.infoDictionary,
            let dBuild = dictionary["CFBundleVersion"] as? String {
             return dBuild
@@ -77,17 +76,17 @@ public enum PKAppInfo {
     }
 
     /// The application's bundle identifier.
-    public static var bundleIdentifier: String {
+    static var bundleIdentifier: String {
         Bundle.main.bundleIdentifier ?? "Unknown"
     }
 
     /// Is the application running downloaded from TestFlight
-    public static var isTestflight: Bool {
+    static var isTestflight: Bool {
         Bundle.main.appStoreReceiptURL?.absoluteString.contains("sandboxReceipt") ?? false
     }
 
     /// Is the application running downloaded from TestFlight or locally debugging
-    public static var isDebugBuild: Bool {
+    static var isDebugBuild: Bool {
 #if DEBUG
         true
 #else
@@ -96,12 +95,12 @@ public enum PKAppInfo {
     }
 
     /// Is the application an app extension
-    public static var isAppExtension: Bool {
+    static var isAppExtension: Bool {
         return Bundle.main.executablePath?.contains(".appex/") ?? false
     }
 
     /// Is the iOS application running on a mac
-    public static var isiOSAppOnMac: Bool {
+    static var isiOSAppOnMac: Bool {
 #if os(macOS) || os(iOS)
         if #available(iOS 14.0, *) {
             return ProcessInfo.processInfo.isiOSAppOnMac
@@ -112,7 +111,7 @@ public enum PKAppInfo {
     }
 
     /// Is the iOS application running on a Vision Pro
-    public static var isiOSAppOnVisionPro: Bool {
+    static var isiOSAppOnVisionPro: Bool {
 #if targetEnvironment(simulator)
         return ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]?.hasPrefix(
             "RealityDevice") ?? false
@@ -131,7 +130,7 @@ public enum PKAppInfo {
     }
 
     /// Is the application running as a Mac Catalyst app
-    public static var isMacCatalystApp: Bool {
+    static var isMacCatalystApp: Bool {
 #if os(macOS) || os(iOS)
         if #available(iOS 14.0, *) {
             return ProcessInfo.processInfo.isMacCatalystApp
@@ -142,7 +141,7 @@ public enum PKAppInfo {
     }
 
     /// Detects if running in Xcode SwiftUI Preview mode
-    public static var isSwiftUIPreview: Bool {
+    static var isSwiftUIPreview: Bool {
 #if DEBUG
         ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
 #else
@@ -151,7 +150,7 @@ public enum PKAppInfo {
     }
 
     /// Detects if the application is running on a simulator
-    public static var isSimulator: Bool {
+    static var isSimulator: Bool {
 #if targetEnvironment(simulator)
         return true
 #else
@@ -160,12 +159,12 @@ public enum PKAppInfo {
     }
 
     /// Detects if the application is running on a simulator or in a SwiftUI Preview
-    public static var isSimulatorOrPreview: Bool {
+    static var isSimulatorOrPreview: Bool {
         return isSimulator || isSwiftUIPreview
     }
 
     /// Detects if UI Tests are running
-    public static var isUITesting: Bool {
+    static var isUITesting: Bool {
 #if DEBUG
         ProcessInfo.processInfo.arguments.contains("UI_TESTING")
 #else
@@ -174,7 +173,7 @@ public enum PKAppInfo {
     }
 
     /// Detects if Unit Tests are running
-    public static var isUnitTesting: Bool {
+    static var isUnitTesting: Bool {
 #if DEBUG
         NSClassFromString("XCTestCase") != nil
 #else
@@ -183,7 +182,7 @@ public enum PKAppInfo {
     }
 
     /// Detects if Low Power Mode is enabled
-    public static var isLowPowerModeActive: Bool {
+    static var isLowPowerModeActive: Bool {
 #if os(iOS) || os(watchOS)
         ProcessInfo.processInfo.isLowPowerModeEnabled
 #else
@@ -192,7 +191,7 @@ public enum PKAppInfo {
     }
 
     /// Detects if running an iOS app on Mac
-    public static var isRunningiOSAppOnMac: Bool {
+    static var isRunningiOSAppOnMac: Bool {
 #if os(iOS)
         ProcessInfo.processInfo.isiOSAppOnMac
 #else
@@ -201,7 +200,7 @@ public enum PKAppInfo {
     }
 
     /// Is a debugger attached to the process
-    public static var isDebuggerAttached: Bool {
+    static var isDebuggerAttached: Bool {
 #if canImport(Darwin)
         var info = kinfo_proc()
         var mib = [CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()]
@@ -214,7 +213,7 @@ public enum PKAppInfo {
     }
 
     /// open settings page
-    public static func openSettings() {
+    static func openSettings() {
         #if os(iOS) || os(tvOS) || os(visionOS)
         if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             openURL(settingsURL)
@@ -224,7 +223,7 @@ public enum PKAppInfo {
 
     /// open notification settings page
     @available(iOS 16.0, *)
-    public static func openNotificationSettings() {
+    static func openNotificationSettings() {
         #if os(iOS) || os(tvOS) || os(visionOS)
         if let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) {
             openURL(settingsURL)
@@ -235,7 +234,7 @@ public enum PKAppInfo {
     /// Get the AppStore information of the application
     /// - Parameter forceRefresh: forced refresh?
     /// - Returns: AppStore information
-    public static func appStoreInfo(_ forceRefresh: Bool = false) async -> PKAppInfoAppStoreInfo? {
+    static func appStoreInfo(_ forceRefresh: Bool = false) async -> PKAppInfoAppStoreInfo? {
 #if os(macOS) || os(iOS)
         let decoder = JSONDecoder()
 
@@ -269,7 +268,7 @@ public enum PKAppInfo {
 
     /// Get the Review URL of the application
     /// - Returns: URL of the review page in the AppStore
-    public static var reviewURL: URL? {
+    static var reviewURL: URL? {
         get async {
             if let identifier = await PKAppInfo.appStoreInfo()?.results.first?.trackId,
                let url = URL(
@@ -284,7 +283,7 @@ public enum PKAppInfo {
     /// Open the AppStore Page for the current app
     /// - Returns: URL of the review page in the AppStore
     @discardableResult
-    public static func openAppStorePage() async -> Bool {
+    static func openAppStorePage() async -> Bool {
         if let identifier = await PKAppInfo.appStoreInfo()?.results.first?.trackId,
            let url = URL(string: "https://itunes.apple.com/app/id\(identifier)") {
             return openURL(url)
@@ -295,7 +294,7 @@ public enum PKAppInfo {
 
     /// Get the URL of the developer page in the AppStore
     /// - Returns: URL of the developer page in the AppStore
-    public static var developerURL: URL? {
+    static var developerURL: URL? {
         get async {
             if let identifier = await PKAppInfo.appStoreInfo()?.results.first?.artistId,
                let url = URL(string: "https://apps.apple.com/developer/id\(identifier)") {
@@ -308,7 +307,7 @@ public enum PKAppInfo {
 
     /// Is this the latest version of the app?
     /// - Returns: Boolean indicating if this is the current version
-    public static var updateAvailable: Bool {
+    static var updateAvailable: Bool {
         get async {
             if let version = await PKAppInfo.appStoreInfo(true)?.results.first?.version {
                 UserDefaults.standard.set(version, forKey: "SEAppInfoAppVersion")
@@ -320,29 +319,29 @@ public enum PKAppInfo {
     }
 
     /// get the latest version on the appstore
-    public static var appStoreVersion: String {
+    static var appStoreVersion: String {
         get async {
             await PKAppInfo.appStoreInfo()?.results.first?.version ?? "Unknown"
         }
     }
 
     /// Is the app running tests
-    public static var isRunningTests: Bool {
+    static var isRunningTests: Bool {
         ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
     }
 
     /// Is the app running UI tests
-    public static var isRunningUITests: Bool {
+    static var isRunningUITests: Bool {
         ProcessInfo.processInfo.arguments.contains("-ui_testing")
     }
 
     /// Is the app running in Xcode Preview
-    public static var isRunningInPreview: Bool {
+    static var isRunningInPreview: Bool {
         ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != nil
     }
 
     /// URL Schemes
-    public static var schemes: [String] {
+    static var schemes: [String] {
         guard let infoDictionary = Bundle.main.infoDictionary,
               let urlTypes = infoDictionary["CFBundleURLTypes"] as? [AnyObject],
               let urlType = urlTypes.first as? [String: AnyObject],
@@ -355,7 +354,7 @@ public enum PKAppInfo {
     }
 
     /// Main URL scheme
-    public static var mainScheme: String? {
+    static var mainScheme: String? {
         return schemes.first
     }
 
@@ -363,7 +362,7 @@ public enum PKAppInfo {
     /// Get application icon
     ///
     /// - Returns: Application icon
-    public static var appIcon: Image {
+    static var appIcon: Image {
 #if canImport(UIKit)
         if isSwiftUIPreview {
             return Image(systemName: "hammer.fill")
@@ -407,7 +406,7 @@ public enum PKAppInfo {
     }
 
     /// Get device type
-    public static var deviceType: String {
+    static var deviceType: String {
 #if os(iOS)
         UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
 #elseif os(macOS)
@@ -427,7 +426,7 @@ public enum PKAppInfo {
 
 // MARK: - Signal and environment metadata
 
-public extension PKAppInfo {
+extension PKAppInfo {
     /// Whether the app is running in Simulator or was installed through TestFlight.
     static var isSimulatorOrTestFlight: Bool { isSimulator || isTestFlight }
 
@@ -718,23 +717,23 @@ public extension PKAppInfo {
 }
 
 /// AppStore Search Result
-public struct PKAppInfoAppStoreInfo: Decodable {
+struct PKAppInfoAppStoreInfo: Decodable {
     /// Result Count
-    public let resultCount: Int
+    let resultCount: Int
 
     /// Results
-    public let results: [PKAppInfoAppStoreResult]
+    let results: [PKAppInfoAppStoreResult]
 }
 
 /// AppStore App Info Result
-public struct PKAppInfoAppStoreResult: Decodable {
+struct PKAppInfoAppStoreResult: Decodable {
     /// Developer Identifier
-    public let artistId: Int
+    let artistId: Int
 
     /// App Identifier
-    public let trackId: Int
+    let trackId: Int
 
     /// App Version number
-    public let version: String
+    let version: String
 }
 // swiftlint:disable:this file_length

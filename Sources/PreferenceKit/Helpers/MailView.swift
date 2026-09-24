@@ -40,7 +40,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public struct MailView: UIViewControllerRepresentable {
+struct MailView: UIViewControllerRepresentable {
     @Environment(\.dismiss)
     private var dismiss
 
@@ -48,7 +48,7 @@ public struct MailView: UIViewControllerRepresentable {
     var result: Result<MFMailComposeResult, Error>?
 
     /// A closure that configures the mail composer before it is presented.
-    public var configure: ((MFMailComposeViewController) -> Void)?
+    var configure: ((MFMailComposeViewController) -> Void)?
 
     /// Creates a mail composer view.
     /// This view is used to present a mail composer to the user.
@@ -80,7 +80,7 @@ public struct MailView: UIViewControllerRepresentable {
     /// - Parameters:
     ///   - result: A binding updated with the result or error from the mail composer.
     ///   - configure: A closure that configures the mail composer before presentation.
-    public init(
+    init(
         result: Binding<Result<MFMailComposeResult, Error>?>,
         configure: ((MFMailComposeViewController) -> Void)? = nil
     ) {
@@ -89,7 +89,7 @@ public struct MailView: UIViewControllerRepresentable {
     }
 
     /// Coordinates mail composer delegate callbacks and dismissal.
-    public final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+    final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
         let dismiss: DismissAction
 
         @Binding
@@ -107,7 +107,7 @@ public struct MailView: UIViewControllerRepresentable {
         ///   - controller: The mail composer that finished.
         ///   - result: The result of the mail composition flow.
         ///   - error: An error encountered while sending or saving the message.
-        public func mailComposeController(
+        func mailComposeController(
             _ controller: MFMailComposeViewController,
             didFinishWith result: MFMailComposeResult,
             error: Error?
@@ -126,7 +126,7 @@ public struct MailView: UIViewControllerRepresentable {
     }
 
     /// Creates the coordinator that handles mail composer delegate callbacks.
-    public func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator {
         return Coordinator(dismiss: dismiss, result: $result)
     }
 
@@ -134,7 +134,7 @@ public struct MailView: UIViewControllerRepresentable {
     ///
     /// - Parameter context: Context supplied by SwiftUI.
     /// - Returns: A configured mail composer view controller.
-    public func makeUIViewController(
+    func makeUIViewController(
         context: UIViewControllerRepresentableContext<MailView>
     ) -> MFMailComposeViewController {
         let viewController = MFMailComposeViewController()
@@ -151,7 +151,7 @@ public struct MailView: UIViewControllerRepresentable {
     /// - Parameters:
     ///   - uiViewController: The mail composer managed by SwiftUI.
     ///   - context: Context supplied by SwiftUI.
-    public func updateUIViewController(
+    func updateUIViewController(
         _ uiViewController: MFMailComposeViewController,
         context: UIViewControllerRepresentableContext<MailView>) {
         }

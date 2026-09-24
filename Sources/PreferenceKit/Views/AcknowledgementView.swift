@@ -15,13 +15,13 @@ import SwiftUI
 /// PreferenceKit Acknowledgement View
 ///
 /// PreferenceKit Acknowledgement View is a SwiftUI View that can be used to show acknowledgements.
-public struct PreferenceKitAcknowledgementView: View {
+struct PreferenceKitAcknowledgementView: View {
     /// The change log entries to display.
-    public var entries: Set<Acknowledgement>
+    var entries: Set<Acknowledgement>
     private let displayedEntries: [Acknowledgement]
 
     /// The body of the view.
-    public var body: some View {
+    var body: some View {
         List {
             ForEach(displayedEntries) { entry in
                 AcknowledgementRow(entry: entry)
@@ -39,7 +39,7 @@ public struct PreferenceKitAcknowledgementView: View {
     ///
     /// - Parameters:
     ///   - entries: The change log entries to display.
-    public init(entries: [Acknowledgement]) {
+    init(entries: [Acknowledgement]) {
         var entries = Set(entries)
 
         if entries.contains(

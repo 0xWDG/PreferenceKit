@@ -16,7 +16,7 @@ extension String {
     /// Creates a string by resolving a SwiftUI localized-string key.
     ///
     /// - Parameter string: The localized-string key to resolve.
-    public init(_ string: LocalizedStringKey) {
+    init(_ string: LocalizedStringKey) {
         self.init(
             NSLocalizedString(
                 Mirror(reflecting: string)

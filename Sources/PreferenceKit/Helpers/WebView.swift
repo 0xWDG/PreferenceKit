@@ -12,9 +12,6 @@
 #if canImport(SwiftUI) && canImport(WebKit) && (canImport(UIKit) || canImport(AppKit))
 import SwiftUI
 @preconcurrency import WebKit
-#if canImport(OSLog)
-import OSLog
-#endif
 
 /// A SwiftUI wrapper around `WKWebView`.
 ///
@@ -31,11 +28,10 @@ import OSLog
 /// WebView(html: "<html><body><h1>Hello World!</h1></body></html>")
 /// ```
 ///
-public struct WebView: PlatformViewRepresentable {
+struct WebView: PlatformViewRepresentable {
     var url: URL
     let onLoad: ((WKWebView, WKNavigation) -> Void)?
     let onError: ((WKWebView, WKNavigation, Error) -> Void)?
-    let html: String?
     let webView = WKWebView()
 
     /// Creates a web view that loads a URL.
@@ -50,7 +46,7 @@ public struct WebView: PlatformViewRepresentable {
     ///   - url: The URL to load.
     ///   - onLoad: Invoked when a main-frame navigation completes.
     ///   - onError: Invoked when a committed main-frame navigation fails.
-    public init(
+    init(
         url: URL,
         onLoad: ((WKWebView, WKNavigation) -> Void)? = nil,
         onError: ((WKWebView, WKNavigation, Error) -> Void)? = nil
@@ -58,7 +54,6 @@ public struct WebView: PlatformViewRepresentable {
         self.url = url
         self.onLoad = onLoad
         self.onError = onError
-        self.html = nil
     }
 
     /// Creates a web view that loads an HTML string.
@@ -74,7 +69,7 @@ public struct WebView: PlatformViewRepresentable {
     ///   - onLoad: Invoked when a main-frame navigation completes.
     ///   - onError: Invoked when a committed main-frame navigation fails.
     @available(iOS 16.0, macOS 13.0, *)
-    public init(
+    init(
         html: String,
         onLoad: ((WKWebView, WKNavigation) -> Void)? = nil,
         onError: ((WKWebView, WKNavigation, Error) -> Void)? = nil
@@ -82,7 +77,6 @@ public struct WebView: PlatformViewRepresentable {
         let tempURL: URL = .cachesDirectory
             .appendingPathComponent("SE_TEMP_HTML.html")
         self.url = tempURL
-        self.html = html
 
         do {
             try html.data(using: .utf8)?.write(to: url)
@@ -98,7 +92,7 @@ public struct WebView: PlatformViewRepresentable {
     ///
     /// - Parameter context: Context supplied by SwiftUI.
     /// - Returns: The configured web view.
-    public func makePlatformView(context: Context) -> WKWebView {
+    func makePlatformView(context: Context) -> WKWebView {
         webView.navigationDelegate = context.coordinator
         #if os(iOS)
         webView.isOpaque = false
@@ -115,7 +109,7 @@ public struct WebView: PlatformViewRepresentable {
     /// - Parameters:
     ///   - platformView: The web view managed by SwiftUI.
     ///   - context: Context supplied by SwiftUI.
-    public func updatePlatformView(_ platformView: WKWebView, context: Context) {
+    func updatePlatformView(_ platformView: WKWebView, context: Context) {
         guard platformView.url != url else { return }
 
         if url.isFileURL {
@@ -126,12 +120,12 @@ public struct WebView: PlatformViewRepresentable {
     }
 
     /// Creates the navigation delegate coordinator.
-    public func makeCoordinator() -> Coordinator {
+    func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
 
     /// Forwards web navigation events to the view's callbacks.
-    public final class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate {
         var parent: WebView
 
         init(_ parent: WebView) {
@@ -144,7 +138,7 @@ public struct WebView: PlatformViewRepresentable {
         ///   - webView: The web view whose navigation failed.
         ///   - navigation: The navigation that failed.
         ///   - error: The navigation error.
-        public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
             parent.onError?(webView, navigation, error)
         }
 
@@ -153,7 +147,7 @@ public struct WebView: PlatformViewRepresentable {
         /// - Parameters:
         ///   - webView: The web view that finished navigating.
         ///   - navigation: The navigation that completed.
-        public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             parent.onLoad?(webView, navigation)
         }
     }
