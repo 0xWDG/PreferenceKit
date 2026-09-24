@@ -50,6 +50,10 @@ struct ContentView: View {
 }
 ```
 
+## Screenshot
+
+<img width="296" height="487" alt="image" src="https://github.com/user-attachments/assets/838fcd55-05c7-4efd-a4c0-fda3c9b214eb" />
+
 ## Contact
 
 [https://wesleydegroot.nl](https://wesleydegroot.nl)
