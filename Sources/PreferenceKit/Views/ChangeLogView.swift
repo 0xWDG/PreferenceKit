@@ -15,12 +15,12 @@ import SwiftUI
 /// PreferenceKit Change Log View
 ///
 /// PreferenceKit Change Log View is a SwiftUI View that can be used to show a change log.
-struct PreferenceKitChangeLogView: View {
+public struct PreferenceKitChangeLogView: View {
     /// The change log entries to display.
     var changeLog: [ChangeLogEntry]
 
     /// The list of change-log entries.
-    var body: some View {
+    public var body: some View {
         List {
             ForEach(changeLog) { changeLogEntry in
                 Section {
@@ -54,7 +54,7 @@ struct PreferenceKitChangeLogView: View {
     ///
     /// - Parameters:
     ///   - changeLog: The change log entries to display.
-    init(changeLog: [ChangeLogEntry]) {
+    public init(changeLog: [ChangeLogEntry]) {
         self.changeLog = changeLog
     }
 }
