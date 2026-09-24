@@ -1,13 +1,13 @@
 {
-  "originHash" : "2e4b2c18164b3a2da0014827d9a006ca61ba2f412dba5d690d89324a36464f3f",
+  "originHash" : "0be1906add4ad1b4b6362063049a7061ca56b63bb42382838562b5f64d9db37e",
   "pins" : [
     {
       "identity" : "oslogviewer",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/0xWDG/OSLogViewer.git",
       "state" : {
-        "revision" : "f226e23a897b58640e09e4bedd53b93440c9152d",
-        "version" : "1.1.5"
+        "revision" : "d1170a311c2a8e6a643bf0b5f5d5849d602e72be",
+        "version" : "1.1.6"
       }
     }
   ],

@@ -20,7 +20,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/0xWDG/OSLogViewer.git", from: "1.1.5")
+        .package(url: "https://github.com/0xWDG/OSLogViewer.git", from: "1.1.6")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
