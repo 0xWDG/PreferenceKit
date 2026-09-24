@@ -21,6 +21,7 @@ The package exposes only the view and the models needed to configure it:
 ### Essentials
 
 - <doc:UsingPreferenceKit>
+- <doc:Configuration>
 
 ### Configuration
 

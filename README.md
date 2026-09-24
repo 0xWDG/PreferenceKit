@@ -82,8 +82,29 @@ struct ContentView: View {
 `privacyPolicyURL` is displayed in an in-app web view where supported; on other
 platforms or OS versions, PreferenceKit opens the URL in the system browser.
 
+## Configuration
+
+All configuration is optional except `changeLog` and `acknowledgements`, which
+accept `nil` when the corresponding row should be hidden.
+
+| Parameter | Effect |
+| --- | --- |
+| `createdBy` | Displays an attributed Markdown link below the app name. |
+| `privacyPolicyURL` | Adds a Privacy Policy row. |
+| `supportEmail` | Adds a Feedback row and includes app and diagnostic details. |
+| `socialMediaLinks` | Adds links for developer profiles and communities. |
+| `changeLog` | Adds a Changelog destination. |
+| `acknowledgements` | Adds an Acknowledgements destination. |
+| `topContent` / `bottomContent` | Places your own `Section` views around the built-in content. |
+
+Use a platform-specific profile identifier for social media when possible—for
+example, `"example"` for GitHub or `"@example@mastodon.social"` for Mastodon.
+You can also pass a complete HTTP or HTTPS URL for custom community, invite,
+or profile destinations.
+
 See the [DocC usage guide](Sources/PreferenceKit/PreferenceKit.docc/UsingPreferenceKit.md)
-for configuration details.
+and [configuration reference](Sources/PreferenceKit/PreferenceKit.docc/Configuration.md)
+for details.
 
 ## Screenshot
 
