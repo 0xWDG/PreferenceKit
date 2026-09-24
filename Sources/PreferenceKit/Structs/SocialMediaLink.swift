@@ -56,7 +56,7 @@ public struct SocialMediaLink: Identifiable, Hashable {
             case .threads: "Threads"
             case .tiktok: "TikTok"
             case .twitch: "Twitch"
-            case .x: "𝕏/Twitter"
+            case .x: "𝕏"
             case .youtube: "YouTube"
             case .website: "Website"
             }
