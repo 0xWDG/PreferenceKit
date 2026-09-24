@@ -5,11 +5,8 @@ information, update links, acknowledgements, changelog entries, support
 feedback, privacy policy links, and developer social-media links.
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F0xWDG%2FPreferenceKit%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/0xWDG/PreferenceKit)
-
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F0xWDG%2FPreferenceKit%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/0xWDG/PreferenceKit)
-
 [![Swift Package Manager](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager)
-
 ![License](https://img.shields.io/github/license/0xWDG/PreferenceKit)
 
 ## Requirements
