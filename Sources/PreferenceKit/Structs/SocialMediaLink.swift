@@ -14,7 +14,7 @@ import Foundation
 /// A link to a social media profile displayed in `PreferenceKit`.
 public struct SocialMediaLink: Identifiable, Hashable {
     /// A supported social media service with a matching bundled symbol asset.
-    public enum Platform: String, CaseIterable, Hashable, Identifiable {
+    public enum Platform: String, CaseIterable, Hashable, Identifiable, Sendable {
         case bluesky
         case discord
         case facebook
