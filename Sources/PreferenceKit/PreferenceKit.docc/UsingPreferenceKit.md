@@ -113,6 +113,36 @@ row presents the policy in-app. Otherwise, it opens the policy in the system
 browser. The in-app reader also has a toolbar button that opens the same URL in
 the system browser.
 
+## Privacy permissions
+
+PreferenceKit detects nonempty usage descriptions in the host app's
+`Info.plist` for Camera, Microphone, Photos, Location, Contacts, Calendar,
+Reminders, and Speech Recognition. When at least one is declared, it adds a
+Privacy destination that shows the declared reason for each capability and, on
+supported platforms, a Change button that opens the relevant Settings page.
+Notifications are also included after notification authorization has been
+requested; unlike the other capabilities, notifications do not have an
+Info.plist usage-description key. Each detail view reads and displays the
+current authorization state without showing a permission prompt.
+
+To add app-specific privacy information, use the `privacyContent` result
+builder. Supply a single row, `Section`, or `Group`; custom content also makes
+the Privacy destination available when the app has no detected permissions.
+
+```swift
+PreferenceKit(
+    changeLog: nil,
+    acknowledgements: nil,
+    privacyContent: {
+        Section("Privacy choices") {
+            NavigationLink("Data controls") {
+                Text("Choose how Example App uses your data.")
+            }
+        }
+    }
+)
+```
+
 ## Next steps
 
 For supported profile formats and the public configuration models, see

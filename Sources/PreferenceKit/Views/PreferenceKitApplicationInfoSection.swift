@@ -15,10 +15,12 @@ import SwiftUI
 import MessageUI
 #endif
 
+/// Displays application information, support actions, and declared privacy capabilities.
 struct PreferenceKitApplicationInfoSection: View {
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
     let privacyPolicyURL: URL?
+    let customPrivacyContent: AnyView?
     let supportEmail: String?
     let fetchLogs: () async -> String
     @Binding private var reviewURL: URL?
@@ -26,10 +28,27 @@ struct PreferenceKitApplicationInfoSection: View {
     @Binding private var isLoading: Bool
     @Binding private var isShowingMailView: Bool
 
+    /// The privacy capabilities declared by the host application.
+    @State private var privacyPermissions: [PreferenceKitPrivacyPermission] = []
+
+    /// Creates the application-information section.
+    ///
+    /// - Parameters:
+    ///   - changeLog: Optional release notes to make available from the section.
+    ///   - acknowledgments: Optional third-party acknowledgements to display.
+    ///   - privacyPolicyURL: Optional URL for the app's privacy policy.
+    ///   - customPrivacyContent: Optional app-specific rows shown in the Privacy destination.
+    ///   - supportEmail: Optional address to receive feedback and diagnostic logs.
+    ///   - fetchLogs: Asynchronously produces diagnostic text to include with feedback.
+    ///   - reviewURL: The app's App Store review destination.
+    ///   - logString: Storage for the fetched diagnostic text.
+    ///   - isLoading: Whether diagnostic text is currently being fetched.
+    ///   - isShowingMailView: Controls presentation of the native mail composer where available.
     init(
         changeLog: [ChangeLogEntry]?,
         acknowledgments: [Acknowledgement]?,
         privacyPolicyURL: URL?,
+        customPrivacyContent: AnyView?,
         supportEmail: String?,
         fetchLogs: @escaping () async -> String,
         reviewURL: Binding<URL?>,
@@ -40,6 +59,7 @@ struct PreferenceKitApplicationInfoSection: View {
         self.changeLog = changeLog
         self.acknowledgments = acknowledgments
         self.privacyPolicyURL = privacyPolicyURL
+        self.customPrivacyContent = customPrivacyContent
         self.supportEmail = supportEmail
         self.fetchLogs = fetchLogs
         _reviewURL = reviewURL
@@ -74,6 +94,22 @@ struct PreferenceKitApplicationInfoSection: View {
 
             if let privacyPolicyURL {
                 PrivacyPolicyLink(url: privacyPolicyURL)
+            }
+
+            if !privacyPermissions.isEmpty || customPrivacyContent != nil {
+                NavigationLink {
+                    PreferenceKitPrivacyList(
+                        permissions: privacyPermissions,
+                        customContent: customPrivacyContent
+                    )
+                } label: {
+                    Label {
+                        Text("Privacy", bundle: .module)
+                    } icon: {
+                        Image(systemName: "lock.shield")
+                            .accessibilityHidden(true)
+                    }
+                }
             }
 
             if let reviewURL {
@@ -131,6 +167,9 @@ struct PreferenceKitApplicationInfoSection: View {
             if reviewURL == nil {
                 reviewURL = await PKAppInfo.reviewURL
             }
+        }
+        .task(id: Bundle.main.bundleURL) {
+            privacyPermissions = await PreferenceKitPrivacyPermission.available(in: .main)
         }
     }
 
@@ -231,6 +270,7 @@ private struct PrivacyPolicyLink: View {
                 privacyPolicyURL: URL(
                     string: "https://wesleydegroot.nl/privacy"
                 ),
+                customPrivacyContent: nil,
                 supportEmail: "email@wesleydegroot.nl",
                 fetchLogs: { "Preview log" },
                 reviewURL: .constant(URL(
@@ -243,5 +283,6 @@ private struct PrivacyPolicyLink: View {
         }
     }
 }
+
 #endif
 #endif

@@ -10,6 +10,7 @@
 //
 
 import PreferenceKit
+import SwiftUI
 import Testing
 
 @Suite("PreferenceKit public API")
@@ -68,5 +69,21 @@ struct PreferenceKitTests {
         )
 
         #expect(link.url?.absoluteString == "https://discord.gg/preferencekit")
+    }
+
+    @Test("Privacy content accepts custom List sections")
+    @MainActor
+    func privacyContentBuilder() {
+        _ = PreferenceKit(
+            changeLog: nil,
+            acknowledgements: nil,
+            privacyContent: {
+                Section("Privacy choices") {
+                    Text("Data controls")
+                }
+            },
+            topContent: { EmptyView() },
+            bottomContent: { EmptyView() }
+        )
     }
 }

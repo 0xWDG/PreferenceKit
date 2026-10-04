@@ -62,6 +62,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     let socialMediaLinks: [SocialMediaLink]
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
+    let customPrivacyContent: AnyView?
     let customTopSection: TopContent?
     let customBottomSection: BottomContent?
 
@@ -79,6 +80,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     ///   - OSLogSubsystem: The subsystem for your OS-Logs (nil = hidden), no value = AppBundle
     ///   - changeLog: Changelog
     ///   - acknowledgements: Acknowledgements to mention
+    ///   - privacyContent: Optional content to add to the Privacy destination.
     ///   - topContent: Custom top content
     ///   - bottomContent: Custom bottom content
     public init(
@@ -89,6 +91,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         OSLogSubsystem: String? = Bundle.main.bundleIdentifier,
         changeLog: [ChangeLogEntry]?,
         acknowledgements: [Acknowledgement]?,
+        @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
         @ViewBuilder topContent: @escaping () -> TopContent? = {
             EmptyView()
         },
@@ -102,6 +105,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         self.socialMediaLinks = socialMediaLinks
         self.changeLog = changeLog
         self.acknowledgments = acknowledgements
+        self.customPrivacyContent = privacyContent()
         self.customTopSection = topContent()
         self.customBottomSection = bottomContent()
 #if canImport(OSLog)
@@ -120,6 +124,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         // swiftlint:disable:previous identifier_name
         _acknowledgements: [Acknowledgement]?,
         // swiftlint:disable:previous identifier_name
+        @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
         @ViewBuilder topContent: @escaping () -> TopContent? = { EmptyView() },
         @ViewBuilder bottomContent: @escaping () -> BottomContent? = { EmptyView() }
     ) {
@@ -137,6 +142,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         self.developerURL = URL(string: "https://apps.apple.com/developer/id602359900")
         self.changeLog = _changeLog
         self.acknowledgments = _acknowledgements
+        self.customPrivacyContent = privacyContent()
         self.customTopSection = topContent()
         self.customBottomSection = bottomContent()
 #if canImport(OSLog)
@@ -193,6 +199,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
                 changeLog: changeLog,
                 acknowledgments: acknowledgments,
                 privacyPolicyURL: privacyPolicyURL,
+                customPrivacyContent: customPrivacyContent,
                 supportEmail: supportEmail,
                 fetchLogs: {
 #if canImport(OSLogViewer) && canImport(OSLog)
@@ -260,6 +267,9 @@ private struct PKSettingsDemo: View {
                     url: "https://wesleydegroot.nl"
                 )
             ],
+            privacyContent: {
+                Text("Test")
+            },
             topContent: {
                 Toggle("Open Sheet", isOn: $isPresented)
             }
