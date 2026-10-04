@@ -169,7 +169,7 @@ struct PreferenceKitApplicationInfoSection: View {
             }
         }
         .task(id: Bundle.main.bundleURL) {
-            privacyPermissions = await PreferenceKitPrivacyPermission.available(in: .main)
+            privacyPermissions = await PreferenceKitPrivacyPermission.available(in: .main, permissions: [])
         }
     }
 

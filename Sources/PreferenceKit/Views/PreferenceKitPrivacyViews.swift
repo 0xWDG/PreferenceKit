@@ -112,7 +112,7 @@ private struct PreferenceKitPrivacyDetail: View {
         .background(Color.primary.opacity(0.045).ignoresSafeArea())
         .navigationTitle(Text(permission.name, bundle: .module))
         .task(id: permission) {
-            authorizationStatus = await permission.authorizationStatus
+            authorizationStatus = await permission.authorizationStatusProvider()
         }
     }
 
@@ -177,7 +177,7 @@ private struct PreferenceKitPrivacyIcon: View {
 
     /// The symbol color that preserves contrast against the tile background.
     private var foregroundColor: Color {
-        permission == .reminders ? .black : .white
+        permission.id == "reminders" ? .black : .white
     }
 
     var body: some View {
@@ -193,7 +193,7 @@ private struct PreferenceKitPrivacyIcon: View {
             )
         )
         .overlay {
-            if permission == .reminders {
+        if permission.id == "reminders" {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .stroke(.gray.opacity(0.25), lineWidth: 1)
             }
@@ -207,7 +207,7 @@ private struct PreferenceKitPrivacyIcon: View {
 #Preview("Privacy") {
     NavigationStack {
         PreferenceKitPrivacyList(
-            permissions: PreferenceKitPrivacyPermission.allCases,
+            permissions: [],
             customContent: nil
         )
     }
@@ -217,7 +217,15 @@ private struct PreferenceKitPrivacyIcon: View {
 #Preview("Microphone Privacy") {
     NavigationStack {
         PreferenceKitPrivacyDetail(
-            permission: .microphone,
+            permission: .init(
+                id: "preview",
+                name: "Microphone",
+                symbolName: "mic.fill",
+                backgroundColor: .orange,
+                usageDescriptionKeys: [],
+                previewUsageDescription: "Microphone access lets Example App record audio for voice notes.",
+                authorizationStatus: { .notDetermined }
+            ),
             usageDescription: "Microphone access lets Example App record audio for voice notes."
         )
         .environment(\.locale, .init(identifier: "nl-NL"))
