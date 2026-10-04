@@ -23,7 +23,8 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
     let usageDescriptionKeys: [String]
     let previewUsageDescription: String
     let isAvailableWithoutUsageDescription: Bool
-    let authorizationStatusProvider: () async -> PreferenceKitPrivacyAuthorizationStatus
+    /// Retrieves the authorization state on the main actor, where the privacy UI consumes it.
+    let authorizationStatusProvider: @MainActor () async -> PreferenceKitPrivacyAuthorizationStatus
 
     /// Creates a capability supplied by an optional companion product.
     public init(
@@ -35,7 +36,7 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
         usageDescriptionKeys: [String],
         previewUsageDescription: String,
         isAvailableWithoutUsageDescription: Bool = false,
-        authorizationStatus: @escaping () async -> PreferenceKitPrivacyAuthorizationStatus
+        authorizationStatus: @escaping @MainActor () async -> PreferenceKitPrivacyAuthorizationStatus
     ) {
         self.id = id
         self.name = name
@@ -50,7 +51,15 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
 
     var usageDescription: String { usageDescription(in: .main) ?? (Self.isPreview ? previewUsageDescription : "") }
 
-    static func available(in bundle: Bundle, permissions: [Self]) async -> [Self] {
+    /// Filters permissions to those declared by the supplied application bundle.
+    ///
+    /// The lookup is main-actor isolated because its result is installed directly in SwiftUI state.
+    ///
+    /// - Parameters:
+    ///   - bundle: The bundle whose privacy usage-description keys are inspected.
+    ///   - permissions: The capabilities to filter.
+    /// - Returns: The capabilities available to display in the application's privacy destination.
+    @MainActor static func available(in bundle: Bundle, permissions: [Self]) async -> [Self] {
         if isPreview { return permissions }
         return permissions.filter {
             $0.isAvailableWithoutUsageDescription || $0.usageDescription(in: bundle) != nil
