@@ -26,20 +26,29 @@ struct PreferenceKitPrivacyList: View {
 
     var body: some View {
         List {
-            ForEach(permissions) { permission in
-                NavigationLink {
-                    PreferenceKitPrivacyDetail(permission: permission)
-                } label: {
-                    Label {
-                        Text(permission.name)
-                    } icon: {
-                        PreferenceKitPrivacyIcon(permission: permission, size: 24)
-                    }
-                }
-            }
-
             if let customContent {
                 customContent
+            }
+
+            if !permissions.isEmpty {
+                Section("Privacy permissions") {
+                    ForEach(permissions) { permission in
+                        NavigationLink {
+                            PreferenceKitPrivacyDetail(
+                                permission: permission
+                            )
+                        } label: {
+                            Label {
+                                Text(permission.name)
+                            } icon: {
+                                PreferenceKitPrivacyIcon(
+                                    permission: permission,
+                                    size: 24
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
         .navigationTitle(Text("Privacy", bundle: .module))
@@ -128,7 +137,6 @@ private struct PreferenceKitPrivacyDetail: View {
                 Text(authorizationStatus.displayName)
                     .foregroundStyle(authorizationStatus.tint)
                     .multilineTextAlignment(.trailing)
-                    .accessibilityLabel("Permission status: \(authorizationStatus.displayName)")
             }
             .font(.body.weight(.medium))
         }
@@ -136,10 +144,6 @@ private struct PreferenceKitPrivacyDetail: View {
         .frame(maxWidth: .infinity)
         .background(.background, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(
-            "\(permission.name) privacy information. \(usageDescription). "
-                + "Permission status: \(authorizationStatus.displayName)."
-        )
     }
 
     /// The settings page used to change the capability's authorization.

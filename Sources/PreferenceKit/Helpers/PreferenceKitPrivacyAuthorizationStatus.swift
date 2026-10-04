@@ -44,7 +44,7 @@ enum PreferenceKitPrivacyAuthorizationStatus {
     case unavailable
 
     /// The concise status displayed in the privacy card.
-    var displayName: String {
+    var displayName: LocalizedStringKey {
         switch self {
         case .notDetermined: "Not Determined"
         case .denied: "Denied"
