@@ -125,6 +125,29 @@ requested; unlike the other capabilities, notifications do not have an
 Info.plist usage-description key. Each detail view reads and displays the
 current authorization state without showing a permission prompt.
 
+> Important: Add purpose strings to the consuming app target's `Info.plist`,
+> not to PreferenceKit. App Store Connect analyzes the final app binary, so a
+> linked privacy API can require its corresponding key even when the app has
+> not requested access yet. Each value must truthfully explain the feature
+> that uses the protected data.
+
+| Capability | Info.plist key | Example purpose string |
+| --- | --- | --- |
+| Camera | `NSCameraUsageDescription` | `This app uses the camera to scan receipts.` |
+| Microphone | `NSMicrophoneUsageDescription` | `This app uses the microphone to record voice notes.` |
+| Photos | `NSPhotoLibraryUsageDescription` | `This app lets you attach photos to entries.` |
+| Location | `NSLocationWhenInUseUsageDescription` | `This app uses your location to show nearby events.` |
+| Contacts | `NSContactsUsageDescription` | `This app lets you choose contacts to invite.` |
+| Calendar | `NSCalendarsFullAccessUsageDescription` | `This app adds events to your calendar.` |
+| Reminders | `NSRemindersFullAccessUsageDescription` | `This app creates reminders for your tasks.` |
+| Speech Recognition | `NSSpeechRecognitionUsageDescription` | `This app transcribes spoken event titles.` |
+
+Add `NSMicrophoneUsageDescription` as well when speech recognition captures
+live audio. Localize these strings with the app target's `InfoPlist.strings`.
+Do not add a generic or inaccurate value solely to silence App Store Connect;
+remove the sensitive API from the final app instead when the feature is not
+offered.
+
 To add app-specific privacy information, use the `privacyContent` result
 builder. Supply a single row, `Section`, or `Group`; custom content also makes
 the Privacy destination available when the app has no detected permissions.

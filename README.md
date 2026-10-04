@@ -86,6 +86,11 @@ after the app has requested notification authorization, because Apple does not
 use an Info.plist usage-description key for that capability. Each detail view
 also shows the current authorization status without requesting access.
 
+Privacy purpose strings belong to the consuming app's `Info.plist`. They must
+truthfully describe the feature that accesses the protected data; see
+[the privacy-permissions guide](Sources/PreferenceKit/PreferenceKit.docc/UsingPreferenceKit.md#privacy-permissions)
+for the required keys and examples.
+
 ## Configuration
 
 All configuration is optional except `changeLog` and `acknowledgements`, which
