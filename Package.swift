@@ -5,11 +5,16 @@ import PackageDescription
 
 #if os(Linux)
 let preferenceKitResources: [Resource] = []
+let preferenceKitExcludedResources = [
+    "Assets.xcassets",
+    "Localizable.xcstrings"
+]
 #else
 let preferenceKitResources: [Resource] = [
     .process("Assets.xcassets"),
     .process("Localizable.xcstrings")
 ]
+let preferenceKitExcludedResources: [String] = []
 #endif
 
 let package = Package(
@@ -39,6 +44,7 @@ let package = Package(
             dependencies: [
                 .product(name: "OSLogViewer", package: "OSLogViewer")
             ],
+            exclude: preferenceKitExcludedResources,
             resources: preferenceKitResources,
             swiftSettings: [
                 .enableUpcomingFeature("ApproachableConcurrency")
