@@ -10,7 +10,9 @@
 //
 
 import PreferenceKit
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Testing
 
 @Suite("PreferenceKit public API")
@@ -71,6 +73,8 @@ struct PreferenceKitTests {
         #expect(link.url?.absoluteString == "https://discord.gg/preferencekit")
     }
 
+    #if canImport(SwiftUI)
+    /// Verifies the SwiftUI-only customization API on supported platforms.
     @Test("Privacy content accepts custom List sections")
     @MainActor
     func privacyContentBuilder() {
@@ -86,4 +90,5 @@ struct PreferenceKitTests {
             bottomContent: { EmptyView() }
         )
     }
+    #endif
 }
