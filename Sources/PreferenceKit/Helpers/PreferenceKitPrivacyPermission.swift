@@ -24,7 +24,11 @@ enum PreferenceKitPrivacyPermission: String, CaseIterable, Identifiable {
     /// A stable identifier suitable for use in SwiftUI collections.
     var id: String { rawValue }
 
-    /// The user-facing capability name.
+    #if canImport(SwiftUI)
+    /// The user-facing capability name for SwiftUI views.
+    ///
+    /// This value remains conditional because `LocalizedStringKey` is a
+    /// SwiftUI type and the package also supports platforms without SwiftUI.
     var name: LocalizedStringKey {
         switch self {
         case .camera: "Camera"
@@ -38,6 +42,7 @@ enum PreferenceKitPrivacyPermission: String, CaseIterable, Identifiable {
         case .speechRecognition: "Speech Recognition"
         }
     }
+    #endif
 
     /// The SF Symbol that represents the capability in settings navigation.
     var symbolName: String {
