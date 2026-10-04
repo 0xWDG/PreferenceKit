@@ -11,9 +11,6 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
-#if canImport(UserNotifications)
-import UserNotifications
-#endif
 
 /// A privacy authorization state normalized across capability-specific frameworks.
 public enum PreferenceKitPrivacyAuthorizationStatus {
@@ -44,18 +41,4 @@ public enum PreferenceKitPrivacyAuthorizationStatus {
     }
 }
 
-#if canImport(UserNotifications)
-extension PreferenceKitPrivacyAuthorizationStatus {
-    /// Normalizes a notification authorization status.
-    init(_ status: UNAuthorizationStatus) {
-        switch status {
-        case .notDetermined: self = .notDetermined
-        case .denied: self = .denied
-        case .authorized, .ephemeral: self = .authorized
-        case .provisional: self = .provisional
-        @unknown default: self = .unavailable
-        }
-    }
-}
-#endif
 #endif

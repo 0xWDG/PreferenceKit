@@ -19,6 +19,7 @@ import MessageUI
 struct PreferenceKitApplicationInfoSection: View {
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
+    let configuredPrivacyPermissions: [PreferenceKitPrivacyPermission]
     let privacyPolicyURL: URL?
     let customPrivacyContent: AnyView?
     let supportEmail: String?
@@ -36,6 +37,7 @@ struct PreferenceKitApplicationInfoSection: View {
     /// - Parameters:
     ///   - changeLog: Optional release notes to make available from the section.
     ///   - acknowledgments: Optional third-party acknowledgements to display.
+    ///   - privacyPermissions: Capabilities supplied by imported privacy products.
     ///   - privacyPolicyURL: Optional URL for the app's privacy policy.
     ///   - customPrivacyContent: Optional app-specific rows shown in the Privacy destination.
     ///   - supportEmail: Optional address to receive feedback and diagnostic logs.
@@ -47,6 +49,7 @@ struct PreferenceKitApplicationInfoSection: View {
     init(
         changeLog: [ChangeLogEntry]?,
         acknowledgments: [Acknowledgement]?,
+        privacyPermissions: [PreferenceKitPrivacyPermission],
         privacyPolicyURL: URL?,
         customPrivacyContent: AnyView?,
         supportEmail: String?,
@@ -58,6 +61,7 @@ struct PreferenceKitApplicationInfoSection: View {
     ) {
         self.changeLog = changeLog
         self.acknowledgments = acknowledgments
+        configuredPrivacyPermissions = privacyPermissions
         self.privacyPolicyURL = privacyPolicyURL
         self.customPrivacyContent = customPrivacyContent
         self.supportEmail = supportEmail
@@ -169,7 +173,10 @@ struct PreferenceKitApplicationInfoSection: View {
             }
         }
         .task(id: Bundle.main.bundleURL) {
-            privacyPermissions = await PreferenceKitPrivacyPermission.available(in: .main, permissions: [])
+            privacyPermissions = await PreferenceKitPrivacyPermission.available(
+                in: .main,
+                permissions: configuredPrivacyPermissions
+            )
         }
     }
 
@@ -267,6 +274,7 @@ private struct PrivacyPolicyLink: View {
                         licence: "MIT",
                         url: "https://github.com/0xWDG/PreferenceKit")
                 ],
+                privacyPermissions: [],
                 privacyPolicyURL: URL(
                     string: "https://wesleydegroot.nl/privacy"
                 ),

@@ -62,6 +62,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     let socialMediaLinks: [SocialMediaLink]
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
+    let privacyPermissions: [PreferenceKitPrivacyPermission]
     let customPrivacyContent: AnyView?
     let customTopSection: TopContent?
     let customBottomSection: BottomContent?
@@ -80,6 +81,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     ///   - OSLogSubsystem: The subsystem for your OS-Logs (nil = hidden), no value = AppBundle
     ///   - changeLog: Changelog
     ///   - acknowledgements: Acknowledgements to mention
+    ///   - privacyPermissions: Capabilities supplied by imported privacy products.
     ///   - privacyContent: Optional content to add to the Privacy destination.
     ///   - topContent: Custom top content
     ///   - bottomContent: Custom bottom content
@@ -91,6 +93,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         OSLogSubsystem: String? = Bundle.main.bundleIdentifier,
         changeLog: [ChangeLogEntry]?,
         acknowledgements: [Acknowledgement]?,
+        privacyPermissions: [PreferenceKitPrivacyPermission] = [],
         @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
         @ViewBuilder topContent: @escaping () -> TopContent? = {
             EmptyView()
@@ -105,6 +108,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         self.socialMediaLinks = socialMediaLinks
         self.changeLog = changeLog
         self.acknowledgments = acknowledgements
+        self.privacyPermissions = privacyPermissions
         self.customPrivacyContent = privacyContent()
         self.customTopSection = topContent()
         self.customBottomSection = bottomContent()
@@ -124,6 +128,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         // swiftlint:disable:previous identifier_name
         _acknowledgements: [Acknowledgement]?,
         // swiftlint:disable:previous identifier_name
+        privacyPermissions: [PreferenceKitPrivacyPermission] = [],
         @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
         @ViewBuilder topContent: @escaping () -> TopContent? = { EmptyView() },
         @ViewBuilder bottomContent: @escaping () -> BottomContent? = { EmptyView() }
@@ -142,6 +147,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         self.developerURL = URL(string: "https://apps.apple.com/developer/id602359900")
         self.changeLog = _changeLog
         self.acknowledgments = _acknowledgements
+        self.privacyPermissions = privacyPermissions
         self.customPrivacyContent = privacyContent()
         self.customTopSection = topContent()
         self.customBottomSection = bottomContent()
@@ -198,6 +204,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
             PreferenceKitApplicationInfoSection(
                 changeLog: changeLog,
                 acknowledgments: acknowledgments,
+                privacyPermissions: privacyPermissions,
                 privacyPolicyURL: privacyPolicyURL,
                 customPrivacyContent: customPrivacyContent,
                 supportEmail: supportEmail,

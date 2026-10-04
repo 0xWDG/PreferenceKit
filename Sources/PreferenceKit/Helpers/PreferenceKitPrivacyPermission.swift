@@ -12,9 +12,6 @@
 #if canImport(SwiftUI)
 import Foundation
 import SwiftUI
-#if canImport(UserNotifications)
-import UserNotifications
-#endif
 
 /// Describes an opt-in capability displayed in PreferenceKit's Privacy destination.
 public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
@@ -25,6 +22,7 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
     let iconAssetName: String?
     let usageDescriptionKeys: [String]
     let previewUsageDescription: String
+    let isAvailableWithoutUsageDescription: Bool
     let authorizationStatusProvider: () async -> PreferenceKitPrivacyAuthorizationStatus
 
     /// Creates a capability supplied by an optional companion product.
@@ -36,6 +34,7 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
         iconAssetName: String? = nil,
         usageDescriptionKeys: [String],
         previewUsageDescription: String,
+        isAvailableWithoutUsageDescription: Bool = false,
         authorizationStatus: @escaping () async -> PreferenceKitPrivacyAuthorizationStatus
     ) {
         self.id = id
@@ -45,6 +44,7 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
         self.iconAssetName = iconAssetName
         self.usageDescriptionKeys = usageDescriptionKeys
         self.previewUsageDescription = previewUsageDescription
+        self.isAvailableWithoutUsageDescription = isAvailableWithoutUsageDescription
         authorizationStatusProvider = authorizationStatus
     }
 
@@ -52,7 +52,9 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
 
     static func available(in bundle: Bundle, permissions: [Self]) async -> [Self] {
         if isPreview { return permissions }
-        return permissions.filter { $0.usageDescription(in: bundle) != nil }
+        return permissions.filter {
+            $0.isAvailableWithoutUsageDescription || $0.usageDescription(in: bundle) != nil
+        }
     }
 
     private static var isPreview: Bool { ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" }
@@ -68,4 +70,5 @@ public struct PreferenceKitPrivacyPermission: Identifiable, Equatable {
         return nil
     }
 }
+
 #endif

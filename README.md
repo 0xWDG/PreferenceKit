@@ -23,6 +23,8 @@ dependencies: [
 targets: [
     .target(name: "MyTarget", dependencies: [
         .product(name: "PreferenceKit", package: "PreferenceKit"),
+        // Add only the privacy products used by this app.
+        .product(name: "PreferenceKitCamera", package: "PreferenceKit"),
     ]),
 ]
 ```
@@ -78,18 +80,46 @@ struct ContentView: View {
 
 `privacyPolicyURL` is displayed in an in-app web view where supported; on other
 platforms or OS versions, PreferenceKit opens the URL in the system browser.
-When the host app declares a supported nonempty privacy usage description in
-its `Info.plist`, PreferenceKit also adds a Privacy destination. It lists the
-declared capabilities, shows each system-prompt reason, and links to Settings
-where the platform supports changing the permission. Notifications are included
-after the app has requested notification authorization, because Apple does not
-use an Info.plist usage-description key for that capability. Each detail view
-also shows the current authorization status without requesting access.
+When a configured capability has a supported nonempty privacy usage description
+in the host app's `Info.plist`, PreferenceKit adds a Privacy destination. It
+lists those selected capabilities, shows each system-prompt reason, and links
+to Settings where the platform supports changing the permission. Notifications
+have no `Info.plist` usage-description key and are shown whenever their product
+is configured. Each detail view shows the current authorization status without
+requesting access.
 
 Privacy purpose strings belong to the consuming app's `Info.plist`. They must
 truthfully describe the feature that accesses the protected data; see
 [the privacy-permissions guide](Sources/PreferenceKit/PreferenceKit.docc/UsingPreferenceKit.md#privacy-permissions)
 for the required keys and examples.
+
+Each protected framework is an opt-in product. Add only the products used by
+your app, then import them and pass their capabilities to `PreferenceKit`. This
+prevents an unused protected framework from being linked into the final binary.
+
+```swift
+import PreferenceKit
+import PreferenceKitCamera
+import PreferenceKitPhotos
+
+PreferenceKit(
+    changeLog: nil,
+    acknowledgements: nil,
+    privacyPermissions: [.camera, .photos]
+)
+```
+
+| Capability | Product | Value | Purpose-string key |
+| --- | --- | --- | --- |
+| Camera | `PreferenceKitCamera` | `.camera` | `NSCameraUsageDescription` |
+| Microphone | `PreferenceKitMicrophone` | `.microphone` | `NSMicrophoneUsageDescription` |
+| Photos | `PreferenceKitPhotos` | `.photos` | `NSPhotoLibraryUsageDescription` |
+| Location | `PreferenceKitLocation` | `.location` | `NSLocationWhenInUseUsageDescription` |
+| Contacts | `PreferenceKitContacts` | `.contacts` | `NSContactsUsageDescription` |
+| Calendar | `PreferenceKitCalendar` | `.calendar` | `NSCalendarsFullAccessUsageDescription` |
+| Reminders | `PreferenceKitReminders` | `.reminders` | `NSRemindersFullAccessUsageDescription` |
+| Speech Recognition | `PreferenceKitSpeechRecognition` | `.speechRecognition` | `NSSpeechRecognitionUsageDescription` |
+| Notifications | `PreferenceKitNotifications` | `.notifications` | None |
 
 ## Configuration
 
@@ -100,6 +130,7 @@ accept `nil` when the corresponding row should be hidden.
 | --- | --- |
 | `createdBy` | Displays an attributed Markdown link below the app name. |
 | `privacyPolicyURL` | Adds a Privacy Policy row. |
+| `privacyPermissions` | Selected capabilities from imported privacy products. |
 | `privacyContent` | Adds a custom row or section in the Privacy destination. |
 | `supportEmail` | Adds a Feedback row and includes app and diagnostic details. |
 | `socialMediaLinks` | Adds links for developer profiles and communities. |

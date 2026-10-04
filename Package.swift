@@ -31,7 +31,16 @@ let package = Package(
         .library(
             name: "PreferenceKit",
             targets: ["PreferenceKit"]
-        )
+        ),
+        .library(name: "PreferenceKitCamera", targets: ["PreferenceKitCamera"]),
+        .library(name: "PreferenceKitMicrophone", targets: ["PreferenceKitMicrophone"]),
+        .library(name: "PreferenceKitPhotos", targets: ["PreferenceKitPhotos"]),
+        .library(name: "PreferenceKitLocation", targets: ["PreferenceKitLocation"]),
+        .library(name: "PreferenceKitContacts", targets: ["PreferenceKitContacts"]),
+        .library(name: "PreferenceKitCalendar", targets: ["PreferenceKitCalendar"]),
+        .library(name: "PreferenceKitReminders", targets: ["PreferenceKitReminders"]),
+        .library(name: "PreferenceKitSpeechRecognition", targets: ["PreferenceKitSpeechRecognition"]),
+        .library(name: "PreferenceKitNotifications", targets: ["PreferenceKitNotifications"])
     ],
     dependencies: [
         .package(url: "https://github.com/0xWDG/OSLogViewer.git", from: "1.1.6")
@@ -50,6 +59,15 @@ let package = Package(
                 .enableUpcomingFeature("ApproachableConcurrency")
             ]
         ),
+        .target(name: "PreferenceKitCamera", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitMicrophone", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitPhotos", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitLocation", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitContacts", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitCalendar", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitReminders", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitSpeechRecognition", dependencies: ["PreferenceKit"]),
+        .target(name: "PreferenceKitNotifications", dependencies: ["PreferenceKit"]),
         .testTarget(
             name: "PreferenceKitTests",
             dependencies: ["PreferenceKit"]

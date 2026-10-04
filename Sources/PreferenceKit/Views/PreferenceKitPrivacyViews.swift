@@ -151,10 +151,10 @@ private struct PreferenceKitPrivacyDetail: View {
     /// The settings page used to change the capability's authorization.
     private var settingsURL: URL? {
 #if os(iOS) || targetEnvironment(macCatalyst)
-        if permission == .notifications,
-           #available(iOS 16.0, *) {
-            return URL(string: UIApplication.openNotificationSettingsURLString)
-        }
+//        if permission == .notifications,
+//           #available(iOS 16.0, *) {
+//            return URL(string: UIApplication.openNotificationSettingsURLString)
+//        }
         return URL(string: UIApplication.openSettingsURLString)
 #elseif os(macOS)
         return URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy")

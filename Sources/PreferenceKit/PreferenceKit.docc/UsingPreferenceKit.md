@@ -115,15 +115,34 @@ the system browser.
 
 ## Privacy permissions
 
-PreferenceKit detects nonempty usage descriptions in the host app's
-`Info.plist` for Camera, Microphone, Photos, Location, Contacts, Calendar,
-Reminders, and Speech Recognition. When at least one is declared, it adds a
-Privacy destination that shows the declared reason for each capability and, on
-supported platforms, a Change button that opens the relevant Settings page.
-Notifications are also included after notification authorization has been
-requested; unlike the other capabilities, notifications do not have an
-Info.plist usage-description key. Each detail view reads and displays the
-current authorization state without showing a permission prompt.
+Privacy framework integrations are separated into opt-in package products:
+`PreferenceKitCamera`, `PreferenceKitMicrophone`, `PreferenceKitPhotos`,
+`PreferenceKitLocation`, `PreferenceKitContacts`, `PreferenceKitCalendar`,
+`PreferenceKitReminders`, `PreferenceKitSpeechRecognition`, and
+`PreferenceKitNotifications`. Import only products for protected APIs your app
+uses, then pass their capability values through `privacyPermissions`; this keeps
+unused protected APIs out of the final app binary.
+
+```swift
+import PreferenceKit
+import PreferenceKitCamera
+
+PreferenceKit(
+    changeLog: nil,
+    acknowledgements: nil,
+    privacyPermissions: [.camera]
+)
+```
+
+PreferenceKit checks the host app's `Info.plist` only for capabilities supplied
+through `privacyPermissions`. A selected Camera, Microphone, Photos, Location,
+Contacts, Calendar, Reminders, or Speech Recognition capability appears when
+its usage description is nonempty. When at least one selected capability is
+available, PreferenceKit adds a Privacy destination that shows the declared
+reason and, on supported platforms, a Change button that opens the relevant
+Settings page. Notifications have no `Info.plist` usage-description key and
+appear whenever `.notifications` is supplied. Each detail view reads and
+displays the current authorization state without showing a permission prompt.
 
 > Important: Add purpose strings to the consuming app target's `Info.plist`,
 > not to PreferenceKit. App Store Connect analyzes the final app binary, so a
@@ -141,6 +160,9 @@ current authorization state without showing a permission prompt.
 | Calendar | `NSCalendarsFullAccessUsageDescription` | `This app adds events to your calendar.` |
 | Reminders | `NSRemindersFullAccessUsageDescription` | `This app creates reminders for your tasks.` |
 | Speech Recognition | `NSSpeechRecognitionUsageDescription` | `This app transcribes spoken event titles.` |
+
+`PreferenceKitNotifications` does not require a purpose string. Include it only
+when your app requests or presents notification authorization.
 
 Add `NSMicrophoneUsageDescription` as well when speech recognition captures
 live audio. Localize these strings with the app target's `InfoPlist.strings`.

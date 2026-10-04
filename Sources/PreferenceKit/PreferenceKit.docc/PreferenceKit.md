@@ -9,12 +9,16 @@ Use ``PreferenceKit`` as the contents of a settings screen. It supplies the
 application header, App Store update and review links, changelog,
 acknowledgements, a privacy policy, feedback, and developer profile links.
 
-The package exposes only the view and the models needed to configure it:
+The core product exposes the view and models needed to configure it:
 
 - ``PreferenceKit``
 - ``Acknowledgement``
 - ``ChangeLogEntry``
 - ``SocialMediaLink``
+
+Privacy framework integrations are separate opt-in products. Add a product only
+when the app uses its corresponding protected framework; see
+<doc:UsingPreferenceKit#Privacy-permissions> for the product list and setup.
 
 ## Topics
 
