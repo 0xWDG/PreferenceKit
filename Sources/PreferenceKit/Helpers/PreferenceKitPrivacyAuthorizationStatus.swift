@@ -241,7 +241,7 @@ private extension PreferenceKitPrivacyAuthorizationStatus {
     init(_ status: CNAuthorizationStatus) {
         switch status {
         case .notDetermined: self = .notDetermined
-        case .restricted: self = .restricted
+        case .restricted, .limited: self = .restricted
         case .denied: self = .denied
         case .authorized: self = .authorized
         @unknown default: self = .unavailable

@@ -147,8 +147,4 @@ extension NSImage {
     var cgImage: CGImage? { self.cgImage(forProposedRect: nil, context: nil, hints: nil) }
 }
 #endif // os(macOS)
-
-#if swift(>=6.0)
-extension PlatformImage: @unchecked @retroactive Sendable { }
-#endif
 #endif

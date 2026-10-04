@@ -25,7 +25,7 @@ enum PreferenceKitPrivacyPermission: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 
     /// The user-facing capability name.
-    var name: String {
+    var name: LocalizedStringKey {
         switch self {
         case .camera: "Camera"
         case .microphone: "Microphone"

@@ -31,7 +31,7 @@ struct PreferenceKitPrivacyList: View {
             }
 
             if !permissions.isEmpty {
-                Section("Privacy permissions") {
+                Section {
                     ForEach(permissions) { permission in
                         NavigationLink {
                             PreferenceKitPrivacyDetail(
@@ -39,7 +39,7 @@ struct PreferenceKitPrivacyList: View {
                             )
                         } label: {
                             Label {
-                                Text(permission.name)
+                                Text(permission.name, bundle: .module)
                             } icon: {
                                 PreferenceKitPrivacyIcon(
                                     permission: permission,
@@ -48,6 +48,8 @@ struct PreferenceKitPrivacyList: View {
                             }
                         }
                     }
+                } header: {
+                    Text("Privacy permissions", bundle: .module)
                 }
             }
         }
@@ -100,15 +102,15 @@ private struct PreferenceKitPrivacyDetail: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.tint)
-                    .accessibilityLabel("Open Settings for \(permission.name)")
-                    .accessibilityHint("Changes this permission in the system Settings app")
+                    .accessibilityLabel(Text("Open Settings", bundle: .module))
+                    .accessibilityHint(Text("Changes this permission in the system Settings app", bundle: .module))
                 }
             }
             .padding(.horizontal, 28)
             .padding(.vertical, 24)
         }
         .background(Color.primary.opacity(0.045).ignoresSafeArea())
-        .navigationTitle(permission.name)
+        .navigationTitle(Text(permission.name, bundle: .module))
         .task(id: permission) {
             authorizationStatus = await permission.authorizationStatus
         }
@@ -120,7 +122,7 @@ private struct PreferenceKitPrivacyDetail: View {
             PreferenceKitPrivacyIcon(permission: permission, size: 136)
                 .frame(width: 136, height: 136)
 
-            Text(permission.name)
+            Text(permission.name, bundle: .module)
                 .font(.title.bold())
 
             Text(usageDescription)
@@ -132,9 +134,9 @@ private struct PreferenceKitPrivacyDetail: View {
             Divider()
 
             HStack {
-                Text("Permission Status")
+                Text("Permission Status", bundle: .module)
                 Spacer(minLength: 12)
-                Text(authorizationStatus.displayName)
+                Text(authorizationStatus.displayName, bundle: .module)
                     .foregroundStyle(authorizationStatus.tint)
                     .multilineTextAlignment(.trailing)
             }
@@ -218,6 +220,7 @@ private struct PreferenceKitPrivacyIcon: View {
             permission: .microphone,
             usageDescription: "Microphone access lets Example App record audio for voice notes."
         )
+        .environment(\.locale, .init(identifier: "nl-NL"))
     }
 }
 #endif
