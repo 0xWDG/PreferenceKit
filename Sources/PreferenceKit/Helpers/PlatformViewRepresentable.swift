@@ -90,10 +90,10 @@ extension PlatformViewRepresentable where NSViewType == PlatformViewType {
 #endif
 
 #if canImport(UIKit)
-/// Detects whether the surrounding SwiftUI hierarchy is backed by a UIKit navigation controller.
+/// Detects whether the surrounding SwiftUI hierarchy is backed by a UIKit navigation or tab bar controller.
 ///
 /// The probe is attached outside PreferenceKit's own navigation container. It therefore identifies
-/// navigation supplied by the host app and leaves standalone presentations unaffected.
+/// containers supplied by the host app and leaves standalone presentations unaffected.
 @MainActor
 struct PreferenceKitNavigationStackProbe: UIViewRepresentable {
     /// Receives the current host-navigation state.
@@ -163,11 +163,18 @@ struct PreferenceKitNavigationStackProbe: UIViewRepresentable {
             reportCurrentNavigationStack()
         }
 
-        /// Reports whether any owning controller is part of a UIKit navigation controller.
+        /// Reports whether any owning controller is part of a UIKit navigation or tab bar controller.
+        ///
+        /// A host-supplied tab bar provides the app's primary navigation affordance, just as a
+        /// navigation controller does. PreferenceKit uses this result to avoid adding a redundant
+        /// close action in either kind of container.
         func reportCurrentNavigationStack() {
             var controller = nearestViewController
             while let currentController = controller {
-                if currentController is UINavigationController || currentController.navigationController != nil {
+                if currentController is UINavigationController ||
+                    currentController.navigationController != nil ||
+                    currentController is UITabBarController ||
+                    currentController.tabBarController != nil {
                     reportNavigationStack?(true)
                     return
                 }
