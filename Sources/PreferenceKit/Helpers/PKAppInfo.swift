@@ -406,6 +406,9 @@ enum PKAppInfo {
     }
 
     /// Get device type
+#if os(iOS)
+    @MainActor
+#endif
     static var deviceType: String {
 #if os(iOS)
         UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
@@ -506,7 +509,7 @@ extension PKAppInfo {
             kCFAllocatorDefault,
             0
            )?.takeRetainedValue() as? Data,
-           let model = String(data: data, encoding: .utf8)?
+           let model = String(bytes: data, encoding: .utf8)?
             .trimmingCharacters(in: .controlCharacters),
            !model.isEmpty {
             return model

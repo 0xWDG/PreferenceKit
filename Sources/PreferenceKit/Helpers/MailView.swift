@@ -89,6 +89,7 @@ struct MailView: UIViewControllerRepresentable {
     }
 
     /// Coordinates mail composer delegate callbacks and dismissal.
+    @MainActor
     final class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
         let dismiss: DismissAction
 
@@ -107,21 +108,24 @@ struct MailView: UIViewControllerRepresentable {
         ///   - controller: The mail composer that finished.
         ///   - result: The result of the mail composition flow.
         ///   - error: An error encountered while sending or saving the message.
-        func mailComposeController(
+        nonisolated func mailComposeController(
             _ controller: MFMailComposeViewController,
             didFinishWith result: MFMailComposeResult,
             error: Error?
         ) {
-            defer {
-                dismiss()
-            }
+            // MessageUI delivers this UI delegate callback on the main thread.
+            MainActor.assumeIsolated {
+                defer {
+                    dismiss()
+                }
 
-            if let error {
-                self.result = .failure(error)
-                return
-            }
+                if let error {
+                    self.result = .failure(error)
+                    return
+                }
 
-            self.result = .success(result)
+                self.result = .success(result)
+            }
         }
     }
 

@@ -25,6 +25,9 @@ import MessageUI
 /// It can show the app icon, app name, created by, privacy policy, support email, twitter handle,
 /// bluesky handle, mastodon handle, app store developer URL, changelog, and additional content.
 public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
+    @Environment(\.dismiss)
+    private var dismiss
+
 #if canImport(MessageUI)
     @State
     private var result: Result<MFMailComposeResult, Error>?
@@ -235,6 +238,15 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         .buttonStyle(.list)
         .foregroundStyle(Color.primary)
         .navigationTitle(PKAppInfo.appName)
+#if canImport(SwiftUI)
+        .toolbar {
+            if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *) {
+                Button(role: .close) {
+                    dismiss()
+                }
+            }
+        }
+#endif
 #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
 #endif
