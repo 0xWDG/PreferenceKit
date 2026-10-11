@@ -141,6 +141,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
 
     /// Internal: Initializes PreferenceKit Settings View (with default parameters for my apps)
     public init(
+        createdBy: String? = nil,
         _changeLog: [ChangeLogEntry]?,
         // swiftlint:disable:previous identifier_name
         _acknowledgements: [Acknowledgement]?,
@@ -154,7 +155,11 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
             EmptyView()
         }
     ) {
-        self.createdBy = "[Wesley de Groot](https://wesleydegroot.nl)"
+        if let createdBy {
+            self.createdBy = createdBy
+        } else {
+            self.createdBy = "[Wesley de Groot](https://wesleydegroot.nl)"
+        }
         self.privacyPolicyURL = URL(
             string: "https://wesleydegroot.nl/apps/\(PKAppInfo.appName.slugified)/privacy/"
         )
