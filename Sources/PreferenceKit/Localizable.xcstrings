@@ -10770,6 +10770,7 @@
       }
     },
     "Privacy Policy" : {
+      "comment" : "Privacy Policy",
       "localizations" : {
         "af" : {
           "stringUnit" : {

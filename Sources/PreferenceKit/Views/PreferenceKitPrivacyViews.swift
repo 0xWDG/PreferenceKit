@@ -17,12 +17,12 @@ import UIKit
 #endif
 
 /// Lists the privacy capabilities that the host application declares.
-struct PreferenceKitPrivacyList: View {
+struct PreferenceKitPrivacyList<Content: View>: View {
     /// The permissions available to inspect.
     let permissions: [PreferenceKitPrivacyPermission]
 
     /// Optional app-specific rows or sections.
-    let customContent: AnyView?
+    let customContent: Content?
 
     var body: some View {
         List {
@@ -94,11 +94,16 @@ private struct PreferenceKitPrivacyDetail: View {
                     Button {
                         openURL(settingsURL)
                     } label: {
-                        Label("Open Settings", systemImage: "arrow.up.forward")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 28)
-                            .padding(.vertical, 20)
-                            .background(.background, in: Capsule())
+                        Label {
+                            Text("Open Settings", bundle: Bundle.module)
+                        } icon: {
+                            Image(systemName: "arrow.up.forward")
+                                .accessibilityHidden(true)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 28)
+                        .padding(.vertical, 20)
+                        .background(.background, in: Capsule())
                     }
                     .buttonStyle(.plain)
                     .foregroundStyle(.tint)
@@ -208,7 +213,7 @@ private struct PreferenceKitPrivacyIcon: View {
     NavigationStack {
         PreferenceKitPrivacyList(
             permissions: [],
-            customContent: nil
+            customContent: Optional<EmptyView>.none
         )
     }
 }

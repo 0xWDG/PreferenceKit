@@ -170,8 +170,8 @@ Do not add a generic or inaccurate value solely to silence App Store Connect;
 remove the sensitive API from the final app instead when the feature is not
 offered.
 
-To add app-specific privacy information, use the `privacyContent` result
-builder. Supply a single row, `Section`, or `Group`; custom content also makes
+To add app-specific privacy information, use the `privacyContent` closure.
+Supply a single row, `Section`, or `Group`; custom content also makes
 the Privacy destination available when the app has no detected permissions.
 
 ```swift

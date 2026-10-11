@@ -16,12 +16,12 @@ import MessageUI
 #endif
 
 /// Displays application information, support actions, and declared privacy capabilities.
-struct PreferenceKitApplicationInfoSection: View {
+struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
     let configuredPrivacyPermissions: [PreferenceKitPrivacyPermission]
     let privacyPolicyURL: URL?
-    let customPrivacyContent: AnyView?
+    let customPrivacyContent: PrivacyContent?
     let supportEmail: String?
     let fetchLogs: () async -> String
     @Binding private var reviewURL: URL?
@@ -51,7 +51,7 @@ struct PreferenceKitApplicationInfoSection: View {
         acknowledgments: [Acknowledgement]?,
         privacyPermissions: [PreferenceKitPrivacyPermission],
         privacyPolicyURL: URL?,
-        customPrivacyContent: AnyView?,
+        customPrivacyContent: PrivacyContent?,
         supportEmail: String?,
         fetchLogs: @escaping () async -> String,
         reviewURL: Binding<URL?>,
@@ -229,7 +229,14 @@ private struct PrivacyPolicyLink: View {
 #if canImport(WebKit) && (os(iOS) || os(macOS) || os(visionOS))
         if #available(iOS 26.0, macOS 26.0, visionOS 26.0, *) {
             NavigationLink {
-                WebViewer(url: url, title: "Privacy Policy")
+                WebViewer(
+                    url: url,
+                    title: NSLocalizedString(
+                        "Privacy Policy",
+                        bundle: .module,
+                        comment: "Privacy Policy"
+                    )
+                )
             } label: {
                 label
             }
@@ -278,7 +285,7 @@ private struct PrivacyPolicyLink: View {
                 privacyPolicyURL: URL(
                     string: "https://wesleydegroot.nl/privacy"
                 ),
-                customPrivacyContent: nil,
+                customPrivacyContent: Optional<EmptyView>.none,
                 supportEmail: "email@wesleydegroot.nl",
                 fetchLogs: { "Preview log" },
                 reviewURL: .constant(URL(

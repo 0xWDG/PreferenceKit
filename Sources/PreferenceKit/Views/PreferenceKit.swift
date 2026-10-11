@@ -24,9 +24,23 @@ import MessageUI
 /// PreferenceKit Settings View is a SwiftUI View that can be used to show information about your app.
 /// It can show the app icon, app name, created by, privacy policy, support email, twitter handle,
 /// bluesky handle, mastodon handle, app store developer URL, changelog, and additional content.
-public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
+public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomContent: View>: View {
     @Environment(\.dismiss)
     private var dismiss
+
+#if canImport(UIKit)
+    @State
+    private var isInHostNavigationStack = false
+#endif
+
+    /// Whether the host presentation needs a close action instead of navigation controls.
+    private var shouldShowCloseButton: Bool {
+#if canImport(UIKit)
+        !isInHostNavigationStack
+#else
+        true
+#endif
+    }
 
 #if canImport(MessageUI)
     @State
@@ -66,7 +80,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
     let privacyPermissions: [PreferenceKitPrivacyPermission]
-    let customPrivacyContent: AnyView?
+    let customPrivacyContent: PrivacyContent?
     let customTopSection: TopContent?
     let customBottomSection: BottomContent?
 
@@ -85,7 +99,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
     ///   - changeLog: Changelog
     ///   - acknowledgements: Acknowledgements to mention
     ///   - privacyPermissions: Capabilities supplied by imported privacy products.
-    ///   - privacyContent: Optional content to add to the Privacy destination.
+    ///   - privacyContent: Optional SwiftUI content to add to the Privacy destination.
     ///   - topContent: Custom top content
     ///   - bottomContent: Custom bottom content
     public init(
@@ -97,7 +111,7 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         changeLog: [ChangeLogEntry]?,
         acknowledgements: [Acknowledgement]?,
         privacyPermissions: [PreferenceKitPrivacyPermission] = [],
-        @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
+        @ViewBuilder privacyContent: @escaping () -> PrivacyContent? = { Optional<EmptyView>.none },
         @ViewBuilder topContent: @escaping () -> TopContent? = {
             EmptyView()
         },
@@ -132,9 +146,13 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         _acknowledgements: [Acknowledgement]?,
         // swiftlint:disable:previous identifier_name
         privacyPermissions: [PreferenceKitPrivacyPermission] = [],
-        @PreferenceKitPrivacyContentBuilder privacyContent: @escaping () -> AnyView? = { nil },
-        @ViewBuilder topContent: @escaping () -> TopContent? = { EmptyView() },
-        @ViewBuilder bottomContent: @escaping () -> BottomContent? = { EmptyView() }
+        @ViewBuilder privacyContent: @escaping () -> PrivacyContent? = { Optional<EmptyView>.none },
+        @ViewBuilder topContent: @escaping () -> TopContent? = {
+            EmptyView()
+        },
+        @ViewBuilder bottomContent: @escaping () -> BottomContent? = {
+            EmptyView()
+        }
     ) {
         self.createdBy = "[Wesley de Groot](https://wesleydegroot.nl)"
         self.privacyPolicyURL = URL(
@@ -194,6 +212,13 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
 #endif
             }
         }
+#if canImport(UIKit)
+        .background(
+            PreferenceKitNavigationStackProbe(
+                isInNavigationStack: $isInHostNavigationStack
+            )
+        )
+#endif
     }
 
     private var settingsForm: some View {
@@ -240,7 +265,8 @@ public struct PreferenceKit<TopContent: View, BottomContent: View>: View {
         .navigationTitle(PKAppInfo.appName)
 #if canImport(SwiftUI)
         .toolbar {
-            if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *) {
+            if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *),
+                shouldShowCloseButton {
                 Button(role: .close) {
                     dismiss()
                 }
