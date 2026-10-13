@@ -12,7 +12,7 @@ extension Color {
     static var listBackground: Color {
 #if canImport(AppKit)
         Color(nsColor: .controlBackgroundColor)
-#elseif canImport(UIKit)
+#elseif canImport(UIKit) && !os(watchOS)
         Color(uiColor: .systemGroupedBackground)
 #else
         Color.lightGray
