@@ -7,6 +7,9 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
+#if canImport(WebKit)
+import WebKit
+#endif
 
 struct WebViewer: View {
     let url: URL
