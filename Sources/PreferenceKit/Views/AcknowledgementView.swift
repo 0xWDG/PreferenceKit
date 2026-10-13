@@ -11,6 +11,9 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
+#if canImport(WebKit)
+import WebKit
+#endif
 
 /// PreferenceKit Acknowledgement View
 ///
