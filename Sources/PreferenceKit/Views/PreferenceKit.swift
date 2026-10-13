@@ -217,7 +217,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
 #endif
             }
         }
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
         .background(
             PreferenceKitNavigationStackProbe(
                 isInNavigationStack: $isInHostNavigationStack
