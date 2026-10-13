@@ -5,11 +5,9 @@
 //  Created by Wesley de Groot on 24/09/2026.
 //
 
-#if canImport(SwiftUI)
+#if canImport(SwiftUI) && canImport(WebKit) && !os(watchOS) && (canImport(UIKit) || canImport(AppKit))
 import SwiftUI
-#if canImport(WebKit)
 import WebKit
-#endif
 
 struct WebViewer: View {
     let url: URL
