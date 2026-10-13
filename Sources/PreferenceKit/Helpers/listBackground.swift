@@ -15,7 +15,7 @@ extension Color {
 #elseif canImport(UIKit) && !os(watchOS)
         Color(uiColor: .systemGroupedBackground)
 #else
-        Color.lightGray
+        Color.gray
 #endif
     }
 }
