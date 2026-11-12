@@ -10,10 +10,10 @@ import SwiftUI
 
 extension Color {
     static var listBackground: Color {
-#if canImport(AppKit)
-        Color(nsColor: .controlBackgroundColor)
-#elseif canImport(UIKit) && !os(watchOS)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
         Color(uiColor: .systemGroupedBackground)
+#elseif canImport(AppKit)
+        Color(nsColor: .controlBackgroundColor)
 #else
         Color.gray
 #endif
