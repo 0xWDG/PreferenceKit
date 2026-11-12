@@ -270,12 +270,24 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
         .navigationTitle(PKAppInfo.appName)
 #if canImport(SwiftUI)
         .toolbar {
+#if compiler(>=6.2)
             if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *),
                 shouldShowCloseButton {
                 Button(role: .close) {
                     dismiss()
                 }
             }
+#else
+            if #available(iOS 26.0, macOS 26.0, tvOS 26.0, watchOS 26.0, visionOS 26.0, *),
+                shouldShowCloseButton {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                }
+                .accessibilityLabel("Close")
+            }
+#endif
         }
 #endif
 #if os(iOS)
