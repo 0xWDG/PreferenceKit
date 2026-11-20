@@ -192,7 +192,8 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
             }
 
             do {
-                if let roadmapURL {
+                if let roadmapURL,
+                   roadmapItems.isEmpty {
                     let (data, _) = try await URLSession.shared.data(from: roadmapURL)
                     roadmapData = data
                     let decoder = JSONDecoder()
@@ -205,6 +206,7 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
                 }
             } catch {
                 print(
+                    "Roadmap",
                     "Error", error,
                     "Data", String(
                         data: roadmapData ?? .init(),
