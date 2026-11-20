@@ -76,6 +76,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
     let createdBy: String?
     let privacyPolicyURL: URL?
     let supportEmail: String?
+    let roadmapURL: URL?
     let socialMediaLinks: [SocialMediaLink]
     let changeLog: [ChangeLogEntry]?
     let acknowledgments: [Acknowledgement]?
@@ -94,6 +95,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
     ///   - createdBy: Your name (supports markdown)
     ///   - privacyPolicyURL: Privacy policy URL.
     ///   - supportEmail: Your support email
+    ///   - roadmapURL: Your roadmap URL (JSON compatible roadmap see ``RoadmapItem`` struct)
     ///   - socialMediaLinks: Additional social media profile links to display.
     ///   - OSLogSubsystem: The subsystem for your OS-Logs (nil = hidden), no value = AppBundle
     ///   - changeLog: Changelog
@@ -106,6 +108,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
         createdBy: String? = nil,
         privacyPolicyURL: URL? = nil,
         supportEmail: String? = nil,
+        roadmapURL: URL? = nil,
         socialMediaLinks: [SocialMediaLink] = [],
         OSLogSubsystem: String? = Bundle.main.bundleIdentifier,
         changeLog: [ChangeLogEntry]?,
@@ -122,6 +125,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
         self.createdBy = createdBy
         self.privacyPolicyURL = privacyPolicyURL
         self.supportEmail = supportEmail
+        self.roadmapURL = roadmapURL
         self.socialMediaLinks = socialMediaLinks
         self.changeLog = changeLog
         self.acknowledgments = acknowledgements
@@ -164,6 +168,9 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
             string: "https://wesleydegroot.nl/apps/\(PKAppInfo.appName.slugified)/privacy/"
         )
         self.supportEmail = "email+\(PKAppInfo.appName.slugified)@wesleydegroot.nl"
+        self.roadmapURL = URL(
+            string: "https://wesleydegroot.nl/roadmap/\(PKAppInfo.appName.slugified)"
+        )
         self.socialMediaLinks = [
             .init(platform: .x, profile: "0xWDG"),
             .init(platform: .bluesky, profile: "0xwdg.bsky.social"),
@@ -241,6 +248,7 @@ public struct PreferenceKit<PrivacyContent: View, TopContent: View, BottomConten
                 privacyPolicyURL: privacyPolicyURL,
                 customPrivacyContent: customPrivacyContent,
                 supportEmail: supportEmail,
+                roadmapURL: roadmapURL,
                 fetchLogs: {
 #if canImport(OSLogViewer) && canImport(OSLog)
                     if let extractor {

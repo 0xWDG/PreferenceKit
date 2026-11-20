@@ -49,6 +49,7 @@ struct ContentView: View {
             createdBy: "[Example Studio](https://example.com)",
             privacyPolicyURL: URL(string: "https://example.com/privacy"),
             supportEmail: "support@example.com",
+            roadmapURL: URL(string: "https://wesleydegroot.nl/roadmap/PreferenceKit"),
             socialMediaLinks: [
                 .init(platform: .github, profile: "example"),
                 .init(platform: .mastodon, profile: "@example@mastodon.social"),
@@ -132,6 +133,7 @@ accept `nil` when the corresponding row should be hidden.
 | `privacyPolicyURL` | Adds a Privacy Policy row. |
 | `privacyPermissions` | Selected capabilities from imported privacy products. |
 | `privacyContent` | Adds a custom row or section in the Privacy destination. |
+| `roadmapURL` | Adds a roadmap URL for planned features and updates. |
 | `supportEmail` | Adds a Feedback row and includes app and diagnostic details. |
 | `socialMediaLinks` | Adds links for developer profiles and communities. |
 | `changeLog` | Adds a Changelog destination. |
@@ -150,6 +152,41 @@ for details.
 ## Screenshot
 
 <img width="296" height="487" alt="image" src="https://github.com/user-attachments/assets/838fcd55-05c7-4efd-a4c0-fda3c9b214eb" />
+
+## Roadmap
+
+You can display a roadmap for planned features and updates by providing a URL using the `roadmapURL` configuration parameter.
+The roadmap URL should point to a JSON file containing the planned features and updates.
+
+Required fields:
+
+| Field | Description |
+| --- | --- |
+| `id` | Unique identifier for the issue or feature request. |
+| `title` | Title of the issue or feature request. |
+| `description` | Detailed description of the issue or feature request. |
+| `state` | Current state of the issue or feature request (e.g., "open"). |
+| `comments` | Array of comments related to the issue or feature request. |
+| `opened_date` | Date when the issue or feature request was opened. |
+| `last_updated` | Date when the issue or feature request was last updated. |
+| `tags` | Array of tags associated with the issue or feature request. |
+
+The JSON should contain an array of roadmap items in this format:
+
+```json
+[
+    {
+        "id": 1,
+        "title": "Title of the issue or feature request",
+        "description": "Description of the issue or feature request",
+        "state": "open",
+        "comments": ["This could be a comment about the issue or feature request"],
+        "opened_date": "2026-01-15T10:00:00Z",
+        "last_updated": "2026-02-02T14:30:00Z",
+        "tags": ["the", "tags"]
+    }
+]
+```
 
 ## Contact
 

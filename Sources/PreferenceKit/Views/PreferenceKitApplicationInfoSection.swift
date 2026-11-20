@@ -23,6 +23,7 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
     let privacyPolicyURL: URL?
     let customPrivacyContent: PrivacyContent?
     let supportEmail: String?
+    let roadmapURL: URL?
     let fetchLogs: () async -> String
     @Binding private var reviewURL: URL?
     @Binding private var logString: String
@@ -31,6 +32,8 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
 
     /// The privacy capabilities declared by the host application.
     @State private var privacyPermissions: [PreferenceKitPrivacyPermission] = []
+    @State private var roadmapItems: [RoadmapItem] = []
+    @State private var roadmapData: Data?
 
     /// Creates the application-information section.
     ///
@@ -41,6 +44,7 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
     ///   - privacyPolicyURL: Optional URL for the app's privacy policy.
     ///   - customPrivacyContent: Optional app-specific rows shown in the Privacy destination.
     ///   - supportEmail: Optional address to receive feedback and diagnostic logs.
+    ///   - roadmapURL: Optional URL pointing to the roadmap for planned features and updates.
     ///   - fetchLogs: Asynchronously produces diagnostic text to include with feedback.
     ///   - reviewURL: The app's App Store review destination.
     ///   - logString: Storage for the fetched diagnostic text.
@@ -53,6 +57,7 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
         privacyPolicyURL: URL?,
         customPrivacyContent: PrivacyContent?,
         supportEmail: String?,
+        roadmapURL: URL?,
         fetchLogs: @escaping () async -> String,
         reviewURL: Binding<URL?>,
         logString: Binding<String>,
@@ -65,6 +70,7 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
         self.privacyPolicyURL = privacyPolicyURL
         self.customPrivacyContent = customPrivacyContent
         self.supportEmail = supportEmail
+        self.roadmapURL = roadmapURL
         self.fetchLogs = fetchLogs
         _reviewURL = reviewURL
         _logString = logString
@@ -80,6 +86,19 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
                         Text("Changelog", bundle: Bundle.module)
                     } icon: {
                         Image(systemName: "newspaper")
+                            .accessibilityHidden(true)
+                    }
+                }
+            }
+
+            if !roadmapItems.isEmpty {
+                NavigationLink {
+                    RoadmapListView(items: roadmapItems)
+                } label: {
+                    Label {
+                        Text("Feedback & Roadmap", bundle: .module)
+                    } icon: {
+                        Image(systemName: "list.bullet.rectangle")
                             .accessibilityHidden(true)
                     }
                 }
@@ -170,6 +189,28 @@ struct PreferenceKitApplicationInfoSection<PrivacyContent: View>: View {
         .task {
             if reviewURL == nil {
                 reviewURL = await PKAppInfo.reviewURL
+            }
+
+            do {
+                if let roadmapURL {
+                    let (data, _) = try await URLSession.shared.data(from: roadmapURL)
+                    roadmapData = data
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    decoder.dateDecodingStrategy = .iso8601
+                    roadmapItems = try decoder.decode(
+                        [RoadmapItem].self,
+                        from: data
+                    )
+                }
+            } catch {
+                print(
+                    "Error", error,
+                    "Data", String(
+                        data: roadmapData ?? .init(),
+                        encoding: .utf8
+                    ) ?? "No data"
+                )
             }
         }
         .task(id: Bundle.main.bundleURL) {
@@ -287,6 +328,9 @@ private struct PrivacyPolicyLink: View {
                 ),
                 customPrivacyContent: Optional<EmptyView>.none,
                 supportEmail: "email@wesleydegroot.nl",
+                roadmapURL: URL(
+                    string: "https://wesleydegroot.nl/roadmap/PreferenceKit"
+                ),
                 fetchLogs: { "Preview log" },
                 reviewURL: .constant(URL(
                     string: "https://wesleydegroot.nl/review"

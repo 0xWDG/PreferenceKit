@@ -105,6 +105,38 @@ PreferenceKit(
 )
 ```
 
+## Add a roadmap
+
+Set `roadmapURL` to the URL of a JSON file to show planned features and
+feedback in the app. The file must contain an array of ``RoadmapItem`` values.
+Dates use ISO 8601 timestamps, and the JSON keys use `snake_case`.
+
+```swift
+PreferenceKit(
+    roadmapURL: URL(string: "https://example.com/roadmap.json"),
+    changeLog: nil,
+    acknowledgements: nil
+)
+```
+
+Each roadmap item includes an integer `id`, `title`, `description`, `state`,
+`comments`, `opened_date`, `last_updated`, and `tags`. For example:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Export settings",
+    "description": "Let people export their preferences as a file.",
+    "state": "open",
+    "comments": ["This is being considered for a future release."],
+    "opened_date": "2026-01-15T10:00:00Z",
+    "last_updated": "2026-02-02T14:30:00Z",
+    "tags": ["export", "settings"]
+  }
+]
+```
+
 ## Privacy policy behavior
 
 When `privacyPolicyURL` is present, PreferenceKit adds a Privacy Policy row.
