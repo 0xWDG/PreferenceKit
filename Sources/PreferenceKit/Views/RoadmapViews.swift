@@ -42,7 +42,7 @@ struct RoadmapListView: View {
                         }
 
                         HStack(spacing: 1) {
-                            Text("Last update:")
+                            Text("Last update:", bundle: .module)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Text(
@@ -54,10 +54,10 @@ struct RoadmapListView: View {
                             Spacer()
 
                             let statusText = item.state.lowercased() == "open"
-                            ? NSLocalizedString("Open", comment: "Open")
-                            : NSLocalizedString("Closed", comment: "Closed")
+                            ? NSLocalizedString("Open", bundle: .module, comment: "Open")
+                            : NSLocalizedString("Closed", bundle: .module, comment: "Closed")
 
-                            Text("Status: \(statusText)")
+                            Text("Status: \(statusText)", bundle: .module)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         }
@@ -80,15 +80,17 @@ private struct RoadmapDetailView: View {
     /// Organizes the selected entry's content into readable detail sections.
     var body: some View {
         List {
-            Section {
-                Text(.init(item.description))
+            if !item.description.isEmpty {
+                Section {
+                    Text(.init(item.description))
+                }
             }
 
             if #available(iOS 16, macOS 13, tvOS 16, watchOS 9, *) {
                 Section {
                     if !item.tags.isEmpty {
                         LabeledContent {
-                            Text(item.tags.joined(separator: ", "))
+                            localizedTags(item.tags)
                                 .fixedSize(horizontal: false, vertical: true)
                         } label: {
                             Text("Tags", bundle: .module)
@@ -112,7 +114,10 @@ private struct RoadmapDetailView: View {
 
             if !item.comments.isEmpty {
                 Section {
-                    ForEach(Array(item.comments.enumerated()), id: \.offset) { _, comment in
+                    ForEach(
+                        Array(item.comments.enumerated()),
+                        id: \.offset
+                    ) { _, comment in
                         Text(.init(comment))
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -124,12 +129,32 @@ private struct RoadmapDetailView: View {
         .navigation(
             title: "\(item.title) #\(item.id)",
             subtitle: item.state.lowercased() == "open"
-            ? NSLocalizedString("Open", comment: "Open")
-            : NSLocalizedString("Closed", comment: "Closed")
+            ? NSLocalizedString("Open", bundle: .module, comment: "Open")
+            : NSLocalizedString("Closed", bundle: .module, comment: "Closed")
         )
 #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
 #endif
+    }
+
+    /// Localizes recognized tags while leaving unknown server-provided tags unchanged.
+    ///
+    /// - Parameter tags: The original tag strings received with the roadmap item.
+    /// - Returns: A text value that resolves known tags from this package's string catalog.
+    private func localizedTags(_ tags: [String]) -> Text {
+        tags.enumerated().reduce(Text("")) { result, element in
+            let (index, tag) = element
+            let separator = index == 0 ? Text("") : Text(verbatim: ", ")
+            let tagText: Text
+
+            if let localizationKey = mostCommmonTags[tag.lowercased()] {
+                tagText = Text(localizationKey, bundle: .module)
+            } else {
+                tagText = Text(verbatim: tag)
+            }
+
+            return result + separator + tagText
+        }
     }
 }
 

@@ -5,7 +5,7 @@
 //  Created by Wesley de Groot on 2025-11-19.
 //  https://wesleydegroot.nl
 //
-//  https://github.com/0xWDG/SwiftExtras
+//  https://github.com/0xWDG/PreferenceKit
 //  MIT License
 //
 
